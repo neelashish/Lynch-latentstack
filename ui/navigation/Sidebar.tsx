@@ -9,6 +9,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   MessageSquare,
@@ -174,8 +175,19 @@ function SidebarFooter() {
 // Main Sidebar export
 // ---------------------------------------------------------------------------
 
-export default function Sidebar({ activeItem = "overview", onNavigate }: SidebarProps) {
+export default function Sidebar({ activeItem, onNavigate }: SidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+
+  const currentActiveItem: NavItem =
+    activeItem ??
+    (pathname?.startsWith("/chat")
+      ? "chat"
+      : pathname?.startsWith("/alerts")
+      ? "alerts"
+      : pathname?.startsWith("/activity")
+      ? "activity"
+      : "overview");
 
   return (
     <>
@@ -191,7 +203,7 @@ export default function Sidebar({ activeItem = "overview", onNavigate }: Sidebar
           Navigation
         </p>
 
-        <NavList activeItem={activeItem} onNavigate={onNavigate} />
+        <NavList activeItem={currentActiveItem} onNavigate={onNavigate} />
 
         <SidebarFooter />
       </aside>
@@ -234,7 +246,7 @@ export default function Sidebar({ activeItem = "overview", onNavigate }: Sidebar
             </p>
 
             <NavList
-              activeItem={activeItem}
+              activeItem={currentActiveItem}
               onNavigate={onNavigate}
               onItemClick={() => setMobileOpen(false)}
             />

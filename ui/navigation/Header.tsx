@@ -8,12 +8,13 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { Bell, User, Zap } from "lucide-react";
 import type { AgentStatus } from "../data/demo";
 
 interface HeaderProps {
   /** Page title displayed in the header */
-  title: string;
+  title?: string;
   /** Agent status — controls pulse color */
   agentStatus?: AgentStatus;
   /** Notification count — shown as badge on bell */
@@ -31,7 +32,21 @@ export default function Header({
   agentStatus = "active",
   notificationCount = 3,
 }: HeaderProps) {
+  const pathname = usePathname();
   const { label, dot } = statusConfig[agentStatus];
+
+  const derivedTitle =
+    title && title !== "Overview"
+      ? title
+      : pathname?.startsWith("/chat")
+      ? "AI Chat Co-Pilot"
+      : pathname?.startsWith("/alerts")
+      ? "Alerts & Triggers"
+      : pathname?.startsWith("/activity")
+      ? "Activity Log"
+      : pathname?.startsWith("/stock")
+      ? "Stock Analysis"
+      : "Overview";
 
   return (
     <header className="sticky top-0 z-20 flex items-center justify-between px-5 py-3.5 bg-[#070a11]/95 backdrop-blur-md border-b border-white/[0.05]">
@@ -41,7 +56,7 @@ export default function Header({
         <div className="w-8 lg:hidden shrink-0" />
         <div className="min-w-0">
           <h1 className="text-sm font-bold text-white tracking-wide truncate">
-            {title}
+            {derivedTitle}
           </h1>
           <p className="text-[10px] text-gray-700 hidden sm:block">
             LYNCH — AI Financial Intelligence

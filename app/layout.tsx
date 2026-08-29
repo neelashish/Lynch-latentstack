@@ -25,9 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#070a11] text-white overflow-hidden`}
+        suppressHydrationWarning
       >
         <div className="flex h-screen overflow-hidden">
           {/* Global Sidebar component */}
