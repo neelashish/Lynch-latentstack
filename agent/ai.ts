@@ -16,6 +16,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { getDemoResponse, LynchResponse } from "./demo-responses";
+import { emitAgentEvent } from "./events";
 
 // ---------------------------------------------------------------------------
 // Context
@@ -287,6 +288,24 @@ export function getLynchResponse(
 
   // ── Step 4: Fetch structured response ────────────────────────────────────
   const response = getDemoResponse(resolvedIntent);
+
+  // ── Step 4b: Emit alert/activity event for non-fallback intents ───────────
+  if (resolvedIntent === "investment_ideas") {
+    emitAgentEvent({
+      icon: "insight",
+      text: "LYNCH generated 3 new investment ideas via SkillPatch workflow",
+    });
+  } else if (resolvedIntent === "portfolio_analysis" || resolvedIntent === "portfolio_risk") {
+    emitAgentEvent({
+      icon: "risk",
+      text: "LYNCH ran full portfolio risk & sector allocation audit",
+    });
+  } else if (response.analysis?.subject) {
+    emitAgentEvent({
+      icon: "alert",
+      text: `LYNCH completed deep-dive research scan for ${response.analysis.subject}`,
+    });
+  }
 
   // ── Step 5: Derive the subject for context carry-forward ─────────────────
   // Prefer the subject embedded in the response's analysis block; otherwise
