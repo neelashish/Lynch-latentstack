@@ -45,57 +45,144 @@ export interface ConversationContext {
  * normalized message. Order matters: more specific entries appear first.
  */
 const INTENT_MAP: Array<{ intent: string; keywords: string[] }> = [
-  // Stock-specific intents
+  // ── 0. Greeting ─────────────────────────────────────────────────────────
+  {
+    intent: "greeting",
+    keywords: [
+      "hello",
+      "hi",
+      "hey",
+      "good morning",
+      "good evening",
+      "hello lynch",
+      "hi lynch",
+      "hey lynch",
+      "greetings",
+    ],
+  },
+
+  // ── 1. Stock-specific intents ────────────────────────────────────────────
   {
     intent: "reliance",
-    keywords: ["reliance", "ril", "reliance industries"],
+    keywords: [
+      "tell me about reliance",
+      "analyze reliance",
+      "analyse reliance",
+      "what do you think about reliance",
+      "give me an analysis of reliance",
+      "how does reliance look",
+      "reliance",
+      "ril",
+      "reliance industries",
+    ],
   },
   {
     intent: "tcs",
-    keywords: ["tcs", "tata consultancy", "tata consulting"],
+    keywords: [
+      "tell me about tcs",
+      "analyze tcs",
+      "analyse tcs",
+      "what do you think about tcs",
+      "give me an analysis of tcs",
+      "how does tcs look",
+      "tcs",
+      "tata consultancy",
+      "tata consulting",
+    ],
   },
   {
     intent: "infy",
-    keywords: ["infy", "infosys", "infosys ltd"],
+    keywords: [
+      "tell me about infy",
+      "tell me about infosys",
+      "analyze infy",
+      "analyse infy",
+      "what do you think about infy",
+      "what do you think about infosys",
+      "how does infy look",
+      "how does infosys look",
+      "infy",
+      "infosys",
+      "infosys ltd",
+    ],
   },
   {
     intent: "hdfcbank",
-    keywords: ["hdfcbank", "hdfc bank", "hdfc", "housing development finance"],
+    keywords: [
+      "tell me about hdfc",
+      "tell me about hdfc bank",
+      "analyze hdfc",
+      "analyse hdfc",
+      "hdfcbank",
+      "hdfc bank",
+      "hdfc",
+      "housing development finance",
+    ],
   },
   {
     intent: "nvda",
-    keywords: ["nvda", "nvidia", "nvda stock"],
+    keywords: [
+      "tell me about nvda",
+      "tell me about nvidia",
+      "analyze nvda",
+      "nvda",
+      "nvidia",
+      "nvda stock",
+    ],
   },
 
-  // Portfolio intents — risk before generic analysis to avoid mismatches
+  // ── 2. Portfolio intents ────────────────────────────────────────────────
   {
     intent: "portfolio_risk",
     keywords: [
       "portfolio risk",
+      "how risky is my portfolio",
       "how risky",
       "risk in my portfolio",
       "portfolio volatility",
       "my portfolio risk",
-      "risky is my portfolio",
       "assess risk",
     ],
   },
   {
     intent: "portfolio_analysis",
     keywords: [
+      "show me my portfolio",
+      "show my portfolio",
+      "what's in my portfolio",
+      "whats in my portfolio",
+      "show my holdings",
+      "what stocks do i own",
+      "my holdings",
       "my portfolio",
       "portfolio",
       "analyze portfolio",
       "analyse portfolio",
-      "show portfolio",
       "portfolio analysis",
-      "holdings",
       "my stocks",
       "my positions",
+      "how is my portfolio doing",
+      "how is my portfolio performing",
+      "what's the status of my portfolio",
+      "whats the status of my portfolio",
+      "is my portfolio doing well",
     ],
   },
 
-  // Watchlist
+  // ── 3. General Risks ────────────────────────────────────────────────────
+  {
+    intent: "general_risks",
+    keywords: [
+      "what are the risks",
+      "what risks should i know about",
+      "what could go wrong",
+      "risks",
+      "risk factors",
+      "what are the risks of",
+    ],
+  },
+
+  // ── 4. Watchlist ────────────────────────────────────────────────────────
   {
     intent: "watchlist",
     keywords: [
@@ -111,7 +198,7 @@ const INTENT_MAP: Array<{ intent: string; keywords: string[] }> = [
     ],
   },
 
-  // Alert explanation
+  // ── 5. Alert explanation ────────────────────────────────────────────────
   {
     intent: "alert_explanation",
     keywords: [
@@ -125,7 +212,7 @@ const INTENT_MAP: Array<{ intent: string; keywords: string[] }> = [
     ],
   },
 
-  // Self-description
+  // ── 6. Self-description ─────────────────────────────────────────────────
   {
     intent: "what_is_lynch",
     keywords: [
@@ -133,31 +220,60 @@ const INTENT_MAP: Array<{ intent: string; keywords: string[] }> = [
       "who is lynch",
       "what are you",
       "what can you do",
+      "how can you help me",
+      "tell me about yourself",
       "how do you work",
       "about lynch",
       "tell me about lynch",
     ],
   },
 
-  // Investment Ideas (vs-equity-research-idea-generation skill)
+  // ── 7. Investment Ideas (vs-equity-research-idea-generation skill) ───────
   {
     intent: "investment_ideas",
     keywords: [
+      "what stocks look interesting",
       "give me some investment ideas",
+      "give me investment ideas",
+      "which stocks should i research",
+      "what stocks should i research",
+      "find some investment opportunities",
+      "show me some opportunities",
+      "what companies should i look at",
+      "what stocks should i look at",
+      "which companies are interesting",
+      "show me opportunities",
+      "what should i research",
       "investment ideas",
       "investment idea",
-      "what stocks look interesting",
       "stocks look interesting",
       "find some investment ideas",
       "find investment ideas",
-      "what stocks should i research",
-      "stocks should i research",
       "screen these stocks",
-      "show me some opportunities",
       "stock opportunities",
       "screening ideas",
       "pitch me something",
       "stock screen",
+    ],
+  },
+
+  // ── 8. Out of scope queries ─────────────────────────────────────────────
+  {
+    intent: "out_of_scope",
+    keywords: [
+      "weather",
+      "temperature",
+      "rain",
+      "joke",
+      "funny",
+      "football",
+      "soccer",
+      "match",
+      "game",
+      "sports",
+      "movie",
+      "recipe",
+      "food",
     ],
   },
 ];

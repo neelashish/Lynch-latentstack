@@ -86,6 +86,18 @@ export interface LynchResponse {
 // ---------------------------------------------------------------------------
 
 const RESPONSES: Record<string, LynchResponse> = {
+  // ─── 0. Greeting ──────────────────────────────────────────────────────────
+  greeting: {
+    intent: "greeting",
+    message:
+      "Hello! I'm LYNCH, your AI investment co-pilot. I can help you analyze stocks, review your portfolio, understand risk alerts, and explore investment ideas using demo market data. What would you like to explore today?",
+    followUps: [
+      "What stocks look interesting?",
+      "Show my portfolio",
+      "What is LYNCH?",
+    ],
+  },
+
   // ─── 1. Reliance Industries ──────────────────────────────────────────────
   reliance: {
     intent: "reliance",
@@ -382,15 +394,44 @@ const RESPONSES: Record<string, LynchResponse> = {
   what_is_lynch: {
     intent: "what_is_lynch",
     message:
-      "LYNCH is your AI investment co-pilot — named after the legendary investor Peter Lynch. It watches your portfolio, scans market patterns, and surfaces insights so you never miss what matters. LYNCH does not execute trades or guarantee returns. It reasons alongside you.",
+      "LYNCH is an AI-powered investment research assistant prototype — named after legendary investor Peter Lynch. It analyzes demo stock data, provides portfolio insights, generates investment ideas, and helps you understand market patterns.\n\n⚠️ DISCLAIMER: This prototype uses DEMO DATA ONLY and does not provide real-time financial advice or execute live trades.",
     followUps: [
       "Show my portfolio",
-      "What should I watch?",
+      "What stocks look interesting?",
       "Analyse RELIANCE",
     ],
   },
 
-  // ─── 11. Investment Ideas (vs-equity-research-idea-generation) ───────────
+  // ─── 11. General Risks ───────────────────────────────────────────────────
+  general_risks: {
+    intent: "general_risks",
+    message:
+      "Every equity investment carries distinct risk factors. Across our demo portfolio, LYNCH identifies four primary risk vectors:\n\n1. Concentration Risk: Tech sector over-exposure (38% of portfolio vs 25% benchmark).\n2. Volatility Risk: Market beta of 1.14 on key holdings.\n3. Valuation Risk: Premium P/E multiples on high-growth IT names.\n4. Macro & Rate Sensitivity: Potential earnings impact from global enterprise spend shifts.\n\n⚠️ Note: All metrics are derived from demo data for hackathon testing.",
+    analysis: {
+      subject: "General Risk Overview",
+      signal: "WATCH",
+      confidence: 76,
+      risk: "MODERATE",
+      reasons: [
+        "Sector concentration: IT sector accounts for 38% of total portfolio value",
+        "Beta sensitivity: 1.14x vs broad market index",
+        "Macro risks: Interest rate volatility & global tech spending slowdowns",
+        "Single-stock weight: Top 3 holdings comprise >50% of portfolio value",
+      ],
+      suggestedActions: [
+        "Review single-stock position sizing to cap max weight at 15%",
+        "Rebalance into defensive/financial sectors (e.g. HDFCBANK)",
+        "Use stop-loss levels on high-beta equity positions",
+      ],
+    },
+    followUps: [
+      "What is my portfolio risk?",
+      "Tell me about TCS",
+      "What stocks look interesting?",
+    ],
+  },
+
+  // ─── 12. Investment Ideas (vs-equity-research-idea-generation) ───────────
   investment_ideas: {
     intent: "investment_ideas",
     message:
@@ -473,15 +514,27 @@ const RESPONSES: Record<string, LynchResponse> = {
     ],
   },
 
-  // ─── 12. Generic Fallback ────────────────────────────────────────────────
+  // ─── 13. Out of Scope ────────────────────────────────────────────────────
+  out_of_scope: {
+    intent: "out_of_scope",
+    message:
+      "I'm currently focused on investment research, portfolio insights, stock analysis, alerts, and investment ideas using our demo dataset. Try asking me about a stock like TCS or RELIANCE, or ask to view your demo portfolio!",
+    followUps: [
+      "Show my portfolio",
+      "What stocks look interesting?",
+      "Analyse TCS",
+    ],
+  },
+
+  // ─── 14. Generic Fallback ────────────────────────────────────────────────
   fallback: {
     intent: "fallback",
     message:
-      "I didn't quite catch that. LYNCH works best with specific questions — try asking me to analyse a stock, review your portfolio, explain an alert, or suggest what to watch. What would you like to explore?",
+      "I'm focused on investment research, portfolio insights, stock analysis, alerts, and investment ideas. Try asking me about a stock, reviewing your demo portfolio, or finding new stock opportunities!",
     followUps: [
       "Analyse RELIANCE",
       "Show my portfolio",
-      "What should I watch?",
+      "What stocks look interesting?",
       "What is LYNCH?",
     ],
   },
