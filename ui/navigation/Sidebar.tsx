@@ -18,13 +18,14 @@ import {
   Zap,
   X,
   Menu,
+  PieChart,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type NavItem = "overview" | "chat" | "alerts" | "activity";
+export type NavItem = "overview" | "chat" | "alerts" | "activity" | "portfolio";
 
 interface SidebarProps {
   activeItem?: NavItem;
@@ -46,6 +47,12 @@ const NAV_ITEMS: Array<{
     label: "Overview",
     icon: <LayoutDashboard size={16} />,
     href: "/",
+  },
+  {
+    id: "portfolio",
+    label: "📊 Portfolio Analyzer",
+    icon: <PieChart size={16} />,
+    href: "/portfolio",
   },
   {
     id: "chat",
@@ -187,6 +194,8 @@ export default function Sidebar({ activeItem, onNavigate }: SidebarProps) {
       ? "alerts"
       : pathname?.startsWith("/activity")
       ? "activity"
+      : pathname?.startsWith("/portfolio")
+      ? "portfolio"
       : "overview");
 
   return (

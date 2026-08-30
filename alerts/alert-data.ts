@@ -24,6 +24,7 @@ export interface ActivityDetails {
 export interface Activity {
   id: string;
   type: ActivityType | string;
+  alertId?: string;
   symbol: string;
   title: string;
   description: string;
