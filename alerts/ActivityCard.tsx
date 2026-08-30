@@ -61,7 +61,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
 
   return (
     <div
-      className={`group relative flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg transition-all duration-200 ${styles.borderHover} hover:bg-slate-900 hover:shadow-slate-950/50`}
+      className={`group relative flex flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#0d1117] p-5 shadow-lg transition-all duration-200 ${styles.borderHover} hover:bg-[#0d1117]/80 hover:shadow-black/50`}
     >
       {/* Header */}
       <div>

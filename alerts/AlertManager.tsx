@@ -83,19 +83,19 @@ export const AlertManager: React.FC<AlertManagerProps> = ({
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 p-4 sm:p-6">
+    <div className="mx-auto max-w-6xl space-y-8 p-4 sm:p-6 md:p-8">
       {/* Header Bar */}
-      <div className="flex flex-col gap-4 border-b border-slate-800 pb-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+      <div className="flex flex-col gap-4 border-b border-white/[0.06] pb-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-semibold tracking-wider text-emerald-400 uppercase">
               LYNCH ALERTS & ACTIVITY
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-100 sm:text-3xl">
+          <h1 className="text-2xl font-bold text-white sm:text-3xl tracking-tight">
             Your Proactive Monitoring
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="text-xs sm:text-sm text-gray-400">
             Set and manage real-time alert conditions for portfolio assets
           </p>
         </div>
