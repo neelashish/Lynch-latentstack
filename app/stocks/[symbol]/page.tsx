@@ -3,7 +3,7 @@
 import React, { use } from "react";
 import StockResearchView from "@/ui/stock/StockResearchView";
 
-export default function StockDetail({
+export default function StockSymbolPage({
   params,
 }: {
   params: Promise<{ symbol: string }>;

@@ -7,6 +7,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from "react";
+import Link from "next/link";
 import Card from "@/ui/components/Card";
 import { Holding } from "../types";
 import { TrendingUp, TrendingDown, Table } from "lucide-react";
@@ -56,11 +57,13 @@ export default function HoldingsTable({ holdings, onRemoveHolding }: HoldingsTab
               return (
                 <tr key={h.symbol} className="hover:bg-white/[0.02] transition-colors">
                   <td className="py-3 px-3">
-                    <div className="font-bold text-white flex items-center gap-1.5">
-                      {h.symbol}
-                      <span className="text-[10px] font-normal text-gray-500">• {h.sector}</span>
-                    </div>
-                    <div className="text-[11px] text-gray-500 truncate max-w-[150px]">{h.name}</div>
+                    <Link href={`/stocks/${h.symbol}`} className="hover:underline block">
+                      <div className="font-bold text-white flex items-center gap-1.5">
+                        {h.symbol}
+                        <span className="text-[10px] font-normal text-gray-500">• {h.sector}</span>
+                      </div>
+                      <div className="text-[11px] text-gray-500 truncate max-w-[150px]">{h.name}</div>
+                    </Link>
                   </td>
 
                   <td className="py-3 px-3 text-right font-semibold text-indigo-300">

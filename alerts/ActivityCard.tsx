@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Activity, ActivitySeverity } from './alert-data';
 import { AlertTriangle, AlertCircle, Info, CheckCircle2, ShieldAlert, ArrowRight, Clock } from 'lucide-react';
 
@@ -67,10 +68,14 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2">
-            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${styles.badgeBg}`}>
+            <Link
+              href={`/stocks/${activity.symbol}`}
+              onClick={(e) => e.stopPropagation()}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${styles.badgeBg} hover:opacity-80 transition-opacity`}
+            >
               <span className={`h-2 w-2 rounded-full ${styles.dotBg} animate-pulse`} />
               {activity.symbol}
-            </span>
+            </Link>
             <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
               {activity.type.replace('_', ' ')}
             </span>

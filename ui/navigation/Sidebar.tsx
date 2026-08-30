@@ -19,11 +19,12 @@ import {
   X,
   Menu,
   PieChart,
+  TrendingUp,
   PanelLeftClose,
   PanelLeft,
 } from "lucide-react";
 
-export type NavItem = "dashboard" | "overview" | "chat" | "portfolio" | "alerts" | "activity";
+export type NavItem = "dashboard" | "overview" | "chat" | "portfolio" | "stocks" | "alerts" | "activity";
 
 interface SidebarProps {
   activeItem?: NavItem;
@@ -61,6 +62,12 @@ const NAV_ITEMS: Array<{
     label: "Portfolio",
     icon: <PieChart size={18} />,
     href: "/portfolio",
+  },
+  {
+    id: "stocks",
+    label: "Stocks",
+    icon: <TrendingUp size={18} />,
+    href: "/stocks",
   },
   {
     id: "alerts",
@@ -120,6 +127,8 @@ export default function Sidebar({
       ? "chat"
       : pathname?.startsWith("/portfolio")
       ? "portfolio"
+      : pathname?.startsWith("/stocks") || pathname?.startsWith("/stock/")
+      ? "stocks"
       : pathname?.startsWith("/alerts")
       ? "alerts"
       : pathname?.startsWith("/activity")

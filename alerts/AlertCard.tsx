@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Alert } from './alert-data';
 import { Trash2, Bell, BellOff, Clock } from 'lucide-react';
 
@@ -45,7 +46,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
     >
       {/* Header Section */}
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
+        <Link href={`/stocks/${alert.symbol}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div
             className={`flex h-10 w-10 items-center justify-center rounded-lg border font-mono text-sm font-bold tracking-wider ${
               isActive
@@ -63,7 +64,7 @@ export const AlertCard: React.FC<AlertCardProps> = ({
               {alert.condition}
             </p>
           </div>
-        </div>
+        </Link>
 
         {/* Status Badge */}
         <div

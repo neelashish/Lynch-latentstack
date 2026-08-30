@@ -97,14 +97,12 @@ export default function Header({
       ? "AI Chat Co-Pilot"
       : pathname?.startsWith("/portfolio")
       ? "Portfolio Analyzer"
+      : pathname?.startsWith("/stocks") || pathname?.startsWith("/stock/")
+      ? "Stock Research"
       : pathname?.startsWith("/alerts")
       ? "Alerts & Triggers"
       : pathname?.startsWith("/activity")
       ? "Activity Log"
-      : pathname?.startsWith("/portfolio")
-      ? "Portfolio Analyzer"
-      : pathname?.startsWith("/stock")
-      ? "Stock Analysis"
       : "Dashboard";
 
   return (
