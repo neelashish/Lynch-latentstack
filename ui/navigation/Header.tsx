@@ -46,6 +46,8 @@ export default function Header({
       ? "Alerts & Triggers"
       : pathname?.startsWith("/activity")
       ? "Activity Log"
+      : pathname?.startsWith("/portfolio")
+      ? "Portfolio Analyzer"
       : pathname?.startsWith("/stock")
       ? "Stock Analysis"
       : "Overview";

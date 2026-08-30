@@ -13,19 +13,19 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   MessageSquare,
-  PieChart,
   Bell,
   Activity,
   Zap,
   X,
   Menu,
+  PieChart,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type NavItem = "overview" | "chat" | "portfolio" | "alerts" | "activity";
+export type NavItem = "overview" | "chat" | "alerts" | "activity" | "portfolio";
 
 interface SidebarProps {
   activeItem?: NavItem;
@@ -49,16 +49,16 @@ const NAV_ITEMS: Array<{
     href: "/",
   },
   {
+    id: "portfolio",
+    label: "📊 Portfolio Analyzer",
+    icon: <PieChart size={16} />,
+    href: "/portfolio",
+  },
+  {
     id: "chat",
     label: "Chat",
     icon: <MessageSquare size={16} />,
     href: "/chat",
-  },
-  {
-    id: "portfolio",
-    label: "Portfolio",
-    icon: <PieChart size={16} />,
-    href: "/portfolio",
   },
   {
     id: "alerts",
@@ -190,12 +190,12 @@ export default function Sidebar({ activeItem, onNavigate }: SidebarProps) {
     activeItem ??
     (pathname?.startsWith("/chat")
       ? "chat"
-      : pathname?.startsWith("/portfolio")
-      ? "portfolio"
       : pathname?.startsWith("/alerts")
       ? "alerts"
       : pathname?.startsWith("/activity")
       ? "activity"
+      : pathname?.startsWith("/portfolio")
+      ? "portfolio"
       : "overview");
 
   return (
