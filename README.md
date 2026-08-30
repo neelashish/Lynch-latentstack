@@ -15,15 +15,6 @@ LYNCH is a demo-first financial intelligence workspace for exploring portfolio h
 
 https://lynch-rust.vercel.app/
 
-## Build in Public
-
-This project was built in public as part of the LYNCH journey. The build updates and product narrative were shared publicly on X:
-
-- Post 1: https://x.com/Neelashish_08/status/2094044919044468846?s=20
-- Post 2: https://x.com/Neelashish_08/status/2093434538496327943?s=20
-
-These posts document the product evolution, early design direction, and the iterative build process behind the LYNCH workspace.
-
 ## Project Resources
 
 Drive: https://drive.google.com/drive/folders/1t1ErWQjCWkvDmyt2Tbv2TBuobcLYjRA6?usp=drive_link
@@ -357,6 +348,15 @@ LYNCH/
 ├── README.md
 └── test-agent-evaluation.js
 ```
+
+## Build in Public
+
+This project was built in public as part of the LYNCH journey. The build updates and product narrative were shared publicly on X:
+
+- Post 1: https://x.com/Neelashish_08/status/2093434538496327943?s=20
+- Post 2: https://x.com/Neelashish_08/status/2094044919044468846?s=20
+
+These posts document the product evolution, early design direction, and the iterative build process behind the LYNCH workspace.
 
 ## Summary
 
