@@ -358,15 +358,6 @@ LYNCH/
 └── test-agent-evaluation.js
 ```
 
-## Build in Public
-
-This project was built in public as part of the LYNCH journey. The build updates and product narrative were shared publicly on X:
-
-- Post 1: https://x.com/Neelashish_08/status/2093434538496327943?s=20
-- Post 2: https://x.com/Neelashish_08/status/2094044919044468846?s=20
-
-These posts document the product evolution, early design direction, and the iterative build process behind the LYNCH workspace.
-
 ## Summary
 
 LYNCH is a research-focused financial intelligence prototype that brings together portfolio analysis, stock research, idea generation, risk monitoring, and conversational insights in one UI. It is intentionally built around a curated demo dataset and deterministic logic, making it a compelling hackathon-grade proof of concept for structured investment analysis rather than a live trading platform.
