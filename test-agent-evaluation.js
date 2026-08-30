@@ -1,35 +1,40 @@
 const fs = require("fs");
 
-let demoCode = fs.readFileSync("agent/demo-responses.ts", "utf8")
-  .replace(/export type [^\n]+;/g, "")
-  .replace(/export interface [\s\S]*?\n\}/g, "")
-  .replace(/type [^\n]+;/g, "")
-  .replace(/interface [\s\S]*?\n\}/g, "")
-  .replace(/:\s*Record<string,\s*LynchResponse>/g, "")
-  .replace(/:\s*LynchSignal/g, "")
-  .replace(/:\s*LynchRisk/g, "")
-  .replace(/:\s*LynchResponse/g, "")
-  .replace(/:\s*string\[\]/g, "")
-  .replace(/:\s*string/g, "")
-  .replace(/:\s*number/g, "")
-  .replace(/:\s*boolean/g, "")
-  .replace(/export /g, "");
+function stripImportsAndTypes(content) {
+  return content
+    .replace(/^import\s+[^;]+;\r?\n/gm, "")
+    .replace(/import\s*\{[^}]*\}\s*from\s*['"][^'"]+['"];?/g, "")
+    .replace(/export\s+type\s+[^;]+;/g, "")
+    .replace(/export\s+interface\s+[\s\S]*?\n\}/g, "")
+    .replace(/interface\s+[\s\S]*?\n\}/g, "")
+    .replace(/as\s+[A-Za-z0-9_]+/g, "")
+    .replace(/let\s+([a-zA-Z0-9_]+)\s*:\s*[^=;]+=/g, "let $1 =")
+    .replace(/const\s+([a-zA-Z0-9_]+)\s*:\s*Array<[^>]+>\s*=/g, "const $1 =")
+    .replace(/const\s+([a-zA-Z0-9_]+)\s*:\s*[^=;]+=/g, "const $1 =")
+    .replace(/:\s*Record<[^>]+>/g, "")
+    .replace(/:\s*StockResearchProfile\s*\|\s*null/g, "")
+    .replace(/:\s*StockComparisonResult\s*\|\s*null/g, "")
+    .replace(/:\s*PortfolioContextAnalysis\s*\|\s*null/g, "")
+    .replace(/:\s*SectorResearchSummary\[\]/g, "")
+    .replace(/:\s*LynchResponse/g, "")
+    .replace(/:\s*LynchSignal/g, "")
+    .replace(/:\s*LynchRisk/g, "")
+    .replace(/:\s*ConversationContext/g, "")
+    .replace(/:\s*LynchAgentResult/g, "")
+    .replace(/:\s*string\[\]/g, "")
+    .replace(/:\s*string\s*\|\s*null/g, "")
+    .replace(/:\s*string/g, "")
+    .replace(/:\s*number/g, "")
+    .replace(/:\s*boolean/g, "")
+    .replace(/export /g, "");
+}
 
-let aiCode = fs.readFileSync("agent/ai.ts", "utf8")
-  .replace(/import [^\n]+;/g, "")
-  .replace(/export interface [\s\S]*?\n\}/g, "")
-  .replace(/interface [\s\S]*?\n\}/g, "")
-  .replace(/:\s*Array<\{ intent: string; keywords: string\[\] \}>/g, "")
-  .replace(/:\s*ConversationContext/g, "")
-  .replace(/:\s*LynchAgentResult/g, "")
-  .replace(/:\s*string\[\]/g, "")
-  .replace(/:\s*string\s*\|\s*null/g, "")
-  .replace(/:\s*string/g, "")
-  .replace(/:\s*number/g, "")
-  .replace(/:\s*boolean/g, "")
-  .replace(/export /g, "");
+let researchCode = stripImportsAndTypes(fs.readFileSync("agent/research-data.ts", "utf8"));
+let engineCode = stripImportsAndTypes(fs.readFileSync("agent/analysis-engine.ts", "utf8"));
+let demoCode = stripImportsAndTypes(fs.readFileSync("agent/demo-responses.ts", "utf8"));
+let aiCode = stripImportsAndTypes(fs.readFileSync("agent/ai.ts", "utf8"));
 
-eval("const DEMO_ACTIVITY = []; const emitAgentEvent = () => {}; const getStoredActivities = () => []; const saveStoredActivities = () => {};\n" + demoCode + "\n" + aiCode + "\n" + `
+eval("const DEMO_ACTIVITY = []; const emitAgentEvent = () => {}; const getStoredActivities = () => []; const saveStoredActivities = () => {};\n" + researchCode + "\n" + engineCode + "\n" + demoCode + "\n" + aiCode + "\n" + `
 const tests = [
   { id: 1, query: "Hello", expectedIntent: "greeting" },
   { id: 2, query: "What is LYNCH?", expectedIntent: "what_is_lynch" },
@@ -39,7 +44,10 @@ const tests = [
   { id: 6, query: "Give me some investment ideas", expectedIntent: "investment_ideas" },
   { id: 7, query: "Tell me about TCS", expectedIntent: "tcs" },
   { id: 8, query: "What are the risks?", expectedIntent: "general_risks" },
-  { id: 9, query: "What is the weather today?", expectedIntent: "out_of_scope" }
+  { id: 9, query: "What is the weather today?", expectedIntent: "out_of_scope" },
+  { id: 10, query: "Compare TCS and INFY", expectedIntent: "compare_tcs_vs_infy" },
+  { id: 11, query: "Which sectors look interesting?", expectedIntent: "sector_research" },
+  { id: 12, query: "How does TCS affect my portfolio?", expectedIntent: "portfolio_context_tcs" }
 ];
 
 const ctx = {};
@@ -50,8 +58,7 @@ tests.forEach(t => {
   const isPass = res.resolvedIntent === t.expectedIntent;
   console.log(\`Test \${t.id}: "\${t.query}"\`);
   console.log(\`  Detected Intent: \${res.resolvedIntent} (Expected: \${t.expectedIntent})\`);
-  console.log(\`  Response Type: \${res.response.ideasBlock ? "ideasBlock" : res.response.analysis ? "analysisCard" : "proseText"}\`);
-  console.log(\`  Message Preview: \${res.response.message.replace(/\\n/g, ' ').slice(0, 100)}...\`);
+  console.log(\`  Response Message: \${res.response.message.slice(0, 80)}...\`);
   console.log(\`  Result: \${isPass ? "PASS" : "FAIL"}\n\`);
 });
 `);

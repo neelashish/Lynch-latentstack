@@ -33,6 +33,8 @@ import {
 } from "lucide-react";
 import { getLynchResponse, ConversationContext } from "./ai";
 import type { LynchResponse, LynchSignal, LynchRisk } from "./demo-responses";
+import type { StockResearchProfile } from "./research-data";
+import type { StockComparisonResult, PortfolioContextAnalysis, SectorResearchSummary } from "./analysis-engine";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Internal types
@@ -410,8 +412,215 @@ function ThinkingIndicator() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Shared avatar components
+// Stock Profile Card — Rich Equity Research Output
 // ─────────────────────────────────────────────────────────────────────────────
+
+function StockResearchCard({ profile }: { profile: StockResearchProfile }) {
+  return (
+    <div className="mt-3 rounded-2xl border border-white/[0.08] bg-[#0d1117] overflow-hidden text-left shadow-xl space-y-4 p-4 sm:p-5">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-black text-white">{profile.symbol}</span>
+            <span className="text-xs text-gray-400">({profile.companyName})</span>
+          </div>
+          <p className="text-[11px] text-gray-500 font-mono mt-0.5">
+            {profile.sector} &middot; {profile.industry} &middot; {profile.marketCap}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="text-right mr-1">
+            <p className="text-xs font-bold text-white font-mono">{profile.price}</p>
+            <p className={`text-[10px] font-bold font-mono ${profile.change.startsWith("+") ? "text-emerald-400" : "text-rose-400"}`}>
+              {profile.change}
+            </p>
+          </div>
+          <SignalBadge signal={profile.signal as LynchSignal} />
+          <RiskBadge risk={profile.riskLevel as LynchRisk} />
+        </div>
+      </div>
+
+      {/* LYNCH Research Score Banner */}
+      <div className="flex items-center justify-between p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+        <div className="flex items-center gap-2">
+          <Zap size={16} className="text-indigo-400" />
+          <span className="text-xs font-bold text-indigo-300">LYNCH Research Score</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-black text-white">{profile.researchScore} / 100</span>
+          <span className="text-[10px] font-mono text-indigo-400 font-bold px-2 py-0.5 rounded bg-indigo-500/20">
+            {profile.researchPriority}
+          </span>
+        </div>
+      </div>
+
+      {/* Fundamentals Grid */}
+      <div className="space-y-2">
+        <p className="text-[10px] uppercase tracking-widest text-indigo-400 font-black">
+          Core Fundamentals
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+          <div className="p-2.5 rounded-xl bg-[#070a11] border border-white/[0.05]">
+            <p className="text-[9px] text-gray-500 font-sans uppercase">ROE</p>
+            <p className="text-xs font-bold text-white mt-0.5">{profile.fundamentals.roe}%</p>
+          </div>
+          <div className="p-2.5 rounded-xl bg-[#070a11] border border-white/[0.05]">
+            <p className="text-[9px] text-gray-500 font-sans uppercase">ROCE</p>
+            <p className="text-xs font-bold text-white mt-0.5">{profile.fundamentals.roce}%</p>
+          </div>
+          <div className="p-2.5 rounded-xl bg-[#070a11] border border-white/[0.05]">
+            <p className="text-[9px] text-gray-500 font-sans uppercase">OP Margin</p>
+            <p className="text-xs font-bold text-white mt-0.5">{profile.fundamentals.operatingMargin}</p>
+          </div>
+          <div className="p-2.5 rounded-xl bg-[#070a11] border border-white/[0.05]">
+            <p className="text-[9px] text-gray-500 font-sans uppercase">FCF Yield</p>
+            <p className="text-xs font-bold text-emerald-400 mt-0.5">{profile.fundamentals.fcfYield}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Valuation & Quality */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div className="p-3 rounded-xl bg-[#070a11] border border-white/[0.05] space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold text-gray-400 uppercase">Valuation</span>
+            <span className="text-[10px] font-bold text-indigo-400 px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">
+              {profile.valuation.assessment}
+            </span>
+          </div>
+          <p className="text-xs font-semibold text-white">
+            P/E: {profile.valuation.pe}x &middot; P/B: {profile.valuation.pb}x
+          </p>
+          <p className="text-[11px] text-gray-400 leading-relaxed">{profile.valuation.valuationNotes}</p>
+        </div>
+
+        <div className="p-3 rounded-xl bg-[#070a11] border border-white/[0.05] space-y-1">
+          <span className="text-[10px] font-bold text-gray-400 uppercase">Quality Profile</span>
+          <p className="text-xs font-semibold text-white">
+            Business: {profile.quality.businessQuality}
+          </p>
+          <p className="text-[11px] text-gray-400">
+            Balance Sheet: {profile.quality.balanceSheet} &middot; Cash: {profile.quality.cashGeneration}
+          </p>
+        </div>
+      </div>
+
+      {/* Catalysts & Risks */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div className="p-3 rounded-xl bg-[#070a11] border border-white/[0.05] space-y-1.5">
+          <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Potential Catalysts</p>
+          <ul className="space-y-1">
+            {profile.catalysts.map((cat, i) => (
+              <li key={i} className="text-[11px] text-gray-300 flex items-start gap-1.5">
+                <span className="text-emerald-400 shrink-0">✓</span>
+                <span>{cat}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="p-3 rounded-xl bg-[#070a11] border border-white/[0.05] space-y-1.5">
+          <p className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Key Downside Risks</p>
+          <ul className="space-y-1">
+            {profile.risks.map((risk, i) => (
+              <li key={i} className="text-[11px] text-gray-400 flex items-start gap-1.5">
+                <span className="text-amber-400 shrink-0">⚠</span>
+                <span>{risk}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Bull & Bear Scenarios */}
+      <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2 text-xs">
+        <div>
+          <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Bull Case: </span>
+          <span className="text-gray-300 text-[11px]">{profile.bullCase}</span>
+        </div>
+        <div>
+          <span className="text-[10px] font-black text-rose-400 uppercase tracking-widest">Bear Case: </span>
+          <span className="text-gray-400 text-[11px]">{profile.bearCase}</span>
+        </div>
+      </div>
+
+      {/* LYNCH Takeaway Footer */}
+      <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[10px]">
+        <p className="text-gray-400 italic">
+          <span className="font-bold text-indigo-400 not-italic">LYNCH Takeaway: </span>
+          {profile.lynchTakeaway}
+        </p>
+        <span className="text-gray-600 font-mono shrink-0 ml-2">DEMO RESEARCH</span>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Stock Comparison Component
+// ─────────────────────────────────────────────────────────────────────────────
+
+function ComparisonCard({ comp }: { comp: StockComparisonResult }) {
+  return (
+    <div className="mt-3 rounded-2xl border border-white/[0.08] bg-[#0d1117] overflow-hidden text-left shadow-xl p-4 sm:p-5 space-y-4">
+      <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
+        <h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest">
+          LYNCH Comparative Analysis: {comp.stockA.symbol} vs {comp.stockB.symbol}
+        </h3>
+        <span className="text-[10px] bg-indigo-500/20 text-indigo-300 font-mono font-bold px-2.5 py-0.5 rounded-full">
+          Winner: {comp.winnerSymbol}
+        </span>
+      </div>
+
+      {/* Side-by-side Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-xs font-mono">
+          <thead>
+            <tr className="text-[10px] text-gray-500 uppercase border-b border-white/[0.06] text-left">
+              <th className="pb-2">Metric</th>
+              <th className="pb-2 text-indigo-300">{comp.stockA.symbol}</th>
+              <th className="pb-2 text-violet-300">{comp.stockB.symbol}</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/[0.04]">
+            <tr>
+              <td className="py-2 text-gray-400 font-sans">Research Score</td>
+              <td className="py-2 font-bold text-white">{comp.stockA.researchScore}/100</td>
+              <td className="py-2 font-bold text-white">{comp.stockB.researchScore}/100</td>
+            </tr>
+            <tr>
+              <td className="py-2 text-gray-400 font-sans">ROE</td>
+              <td className="py-2 text-gray-200">{comp.stockA.fundamentals.roe}%</td>
+              <td className="py-2 text-gray-200">{comp.stockB.fundamentals.roe}%</td>
+            </tr>
+            <tr>
+              <td className="py-2 text-gray-400 font-sans">Operating Margin</td>
+              <td className="py-2 text-gray-200">{comp.stockA.fundamentals.operatingMargin}</td>
+              <td className="py-2 text-gray-200">{comp.stockB.fundamentals.operatingMargin}</td>
+            </tr>
+            <tr>
+              <td className="py-2 text-gray-400 font-sans">P/E Valuation</td>
+              <td className="py-2 text-gray-200">{comp.stockA.valuation.pe}x ({comp.stockA.valuation.assessment})</td>
+              <td className="py-2 text-gray-200">{comp.stockB.valuation.pe}x ({comp.stockB.valuation.assessment})</td>
+            </tr>
+            <tr>
+              <td className="py-2 text-gray-400 font-sans">Risk Rating</td>
+              <td className="py-2 text-gray-200">{comp.stockA.riskLevel}</td>
+              <td className="py-2 text-gray-200">{comp.stockB.riskLevel}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-200 leading-relaxed">
+        <span className="font-bold text-indigo-300">LYNCH Comparison Verdict: </span>
+        {comp.verdict}
+      </div>
+    </div>
+  );
+}
 
 function LynchAvatar() {
   return (
@@ -682,8 +891,18 @@ export default function LynchChat() {
                     {msg.text}
                   </p>
 
+                  {/* Rich Stock Research Card */}
+                  {msg.response?.stockProfile && (
+                    <StockResearchCard profile={msg.response.stockProfile} />
+                  )}
+
+                  {/* Stock Comparison Card */}
+                  {msg.response?.comparison && (
+                    <ComparisonCard comp={msg.response.comparison} />
+                  )}
+
                   {/* Structured analysis card */}
-                  {msg.response?.analysis && (
+                  {msg.response?.analysis && !msg.response?.stockProfile && (
                     <AnalysisCard analysis={msg.response.analysis} />
                   )}
 

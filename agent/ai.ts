@@ -45,7 +45,57 @@ export interface ConversationContext {
  * normalized message. Order matters: more specific entries appear first.
  */
 const INTENT_MAP: Array<{ intent: string; keywords: string[] }> = [
-  // ── 0. Greeting ─────────────────────────────────────────────────────────
+  // ── 0. Comparisons & Portfolio Context (Higher Priority) ─────────────────
+  {
+    intent: "compare_tcs_vs_infy",
+    keywords: [
+      "compare tcs and infy",
+      "compare tcs and infosys",
+      "tcs vs infy",
+      "tcs vs infosys",
+      "which is better tcs or infy",
+      "which is better fundamentally tcs or infy",
+    ],
+  },
+  {
+    intent: "compare_hdfcbank_vs_icicibank",
+    keywords: [
+      "compare hdfc and icici",
+      "compare hdfcbank and icicibank",
+      "hdfc vs icici",
+      "hdfcbank vs icicibank",
+      "which bank is better hdfc or icici",
+    ],
+  },
+  {
+    intent: "portfolio_context_tcs",
+    keywords: [
+      "how does tcs affect my portfolio",
+      "why tcs in my portfolio",
+      "tcs impact on portfolio",
+      "tcs affect my portfolio",
+    ],
+  },
+  {
+    intent: "portfolio_context_reliance",
+    keywords: [
+      "how does reliance affect my portfolio",
+      "reliance impact on portfolio",
+      "reliance affect my portfolio",
+    ],
+  },
+  {
+    intent: "sector_research",
+    keywords: [
+      "which sectors look interesting",
+      "which sector has the strongest fundamentals",
+      "sector research",
+      "sector analysis",
+      "industry research",
+    ],
+  },
+
+  // ── 1. Greeting ─────────────────────────────────────────────────────────
   {
     intent: "greeting",
     keywords: [
@@ -61,74 +111,54 @@ const INTENT_MAP: Array<{ intent: string; keywords: string[] }> = [
     ],
   },
 
-  // ── 1. Stock-specific intents ────────────────────────────────────────────
+  // ── 2. Stock-specific intents ───────────────────────────────────────────
   {
     intent: "reliance",
-    keywords: [
-      "tell me about reliance",
-      "analyze reliance",
-      "analyse reliance",
-      "what do you think about reliance",
-      "give me an analysis of reliance",
-      "how does reliance look",
-      "reliance",
-      "ril",
-      "reliance industries",
-    ],
+    keywords: ["reliance", "ril", "reliance industries", "tell me about reliance", "analyze reliance", "analyse reliance"],
   },
   {
     intent: "tcs",
-    keywords: [
-      "tell me about tcs",
-      "analyze tcs",
-      "analyse tcs",
-      "what do you think about tcs",
-      "give me an analysis of tcs",
-      "how does tcs look",
-      "tcs",
-      "tata consultancy",
-      "tata consulting",
-    ],
+    keywords: ["tcs", "tata consultancy", "tata consulting", "tell me about tcs", "analyze tcs", "analyse tcs"],
   },
   {
     intent: "infy",
-    keywords: [
-      "tell me about infy",
-      "tell me about infosys",
-      "analyze infy",
-      "analyse infy",
-      "what do you think about infy",
-      "what do you think about infosys",
-      "how does infy look",
-      "how does infosys look",
-      "infy",
-      "infosys",
-      "infosys ltd",
-    ],
+    keywords: ["infy", "infosys", "infosys ltd", "tell me about infy", "tell me about infosys", "analyze infy", "analyse infy"],
   },
   {
     intent: "hdfcbank",
-    keywords: [
-      "tell me about hdfc",
-      "tell me about hdfc bank",
-      "analyze hdfc",
-      "analyse hdfc",
-      "hdfcbank",
-      "hdfc bank",
-      "hdfc",
-      "housing development finance",
-    ],
+    keywords: ["hdfcbank", "hdfc bank", "hdfc", "housing development finance", "tell me about hdfc", "analyze hdfc", "analyse hdfc"],
   },
   {
-    intent: "nvda",
-    keywords: [
-      "tell me about nvda",
-      "tell me about nvidia",
-      "analyze nvda",
-      "nvda",
-      "nvidia",
-      "nvda stock",
-    ],
+    intent: "icicibank",
+    keywords: ["icicibank", "icici bank", "icici", "tell me about icici", "analyze icici", "analyse icici"],
+  },
+  {
+    intent: "bhartiartl",
+    keywords: ["bhartiartl", "bharti airtel", "airtel", "bharti", "tell me about airtel", "analyze airtel", "analyse airtel"],
+  },
+  {
+    intent: "tatamotors",
+    keywords: ["tatamotors", "tata motors", "tell me about tata motors", "analyze tata motors", "analyse tata motors"],
+  },
+  {
+    intent: "lt",
+    keywords: ["larsen", "l&t", "larsen & toubro", "tell me about l&t", "analyze l&t", "analyse l&t"],
+  },
+  {
+    intent: "sunpharma",
+    keywords: ["sunpharma", "sun pharma", "sun pharmaceutical", "tell me about sun pharma", "analyze sun pharma"],
+  },
+  {
+    intent: "itc",
+    keywords: ["itc", "itc ltd", "tell me about itc", "analyze itc", "analyse itc"],
+  },
+  {
+    intent: "ntpc",
+    keywords: ["ntpc", "ntpc ltd", "tell me about ntpc", "analyze ntpc", "analyse ntpc"],
+  },
+  {
+    intent: "maruti",
+    keywords: ["maruti", "maruti suzuki", "suzuki", "tell me about maruti", "analyze maruti"],
   },
 
   // ── 2. Portfolio intents ────────────────────────────────────────────────

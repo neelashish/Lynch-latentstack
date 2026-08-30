@@ -8,6 +8,19 @@
 //     LYNCH does not execute real trades or provide financial advice.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import {
+  DEMO_STOCK_UNIVERSE,
+  StockResearchProfile,
+} from "./research-data";
+import {
+  compareStocks,
+  analyzeStockInPortfolioContext,
+  getSectorResearchSummaries,
+  StockComparisonResult,
+  PortfolioContextAnalysis,
+  SectorResearchSummary,
+} from "./analysis-engine";
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -43,8 +56,28 @@ export interface LynchResponse {
   message: string;
 
   /**
-   * Optional structured analysis block.
-   * Present for stock / portfolio analysis responses.
+   * Optional rich equity research profile.
+   * Present for stock analysis responses.
+   */
+  stockProfile?: StockResearchProfile;
+
+  /**
+   * Optional stock comparison data structure.
+   */
+  comparison?: StockComparisonResult;
+
+  /**
+   * Optional portfolio context analysis.
+   */
+  portfolioContext?: PortfolioContextAnalysis;
+
+  /**
+   * Optional sector research block.
+   */
+  sectorSummaries?: SectorResearchSummary[];
+
+  /**
+   * Optional structured analysis block (backwards compatibility & portfolio summaries).
    */
   analysis?: {
     /** Ticker or entity being analysed (e.g. "RELIANCE", "Portfolio"). */
@@ -545,12 +578,99 @@ const RESPONSES: Record<string, LynchResponse> = {
 // ---------------------------------------------------------------------------
 
 /**
- * Returns the structured LYNCH response for a given intent key.
+ * Returns the structured LYNCH response for a given intent key or dynamic query.
  * Falls back to the generic fallback response if the intent is unknown.
- *
- * @param intent - One of the known intent keys, e.g. "reliance", "tcs", "portfolio_risk"
  */
 export function getDemoResponse(intent: string): LynchResponse {
+  // Handle stock-specific profiles dynamically
+  const upperIntent = intent.toUpperCase();
+  if (DEMO_STOCK_UNIVERSE[upperIntent]) {
+    const stock = DEMO_STOCK_UNIVERSE[upperIntent];
+    return {
+      intent: intent.toLowerCase(),
+      message: `Here is the comprehensive LYNCH Equity Research brief for ${stock.companyName} (${stock.symbol}).`,
+      stockProfile: stock,
+      analysis: {
+        subject: stock.symbol,
+        price: stock.price,
+        change: stock.change,
+        signal: stock.signal as LynchSignal,
+        confidence: stock.confidence,
+        risk: stock.riskLevel as LynchRisk,
+        reasons: [
+          `Research Score: ${stock.researchScore}/100 (${stock.researchPriority})`,
+          `ROE: ${stock.fundamentals.roe}% | Operating Margin: ${stock.fundamentals.operatingMargin}`,
+          `Valuation: ${stock.valuation.pe}x P/E (${stock.valuation.assessment})`,
+          stock.lynchTakeaway,
+        ],
+        suggestedActions: [
+          `Review ${stock.symbol} catalysts and risk factors`,
+          `Ask "How does ${stock.symbol} affect my portfolio?"`,
+          `Compare ${stock.symbol} with industry peers`,
+        ],
+      },
+      followUps: [
+        `How does ${stock.symbol} affect my portfolio?`,
+        `What are the key risks of ${stock.symbol}?`,
+        `Compare ${stock.symbol} and INFY`,
+      ],
+    };
+  }
+
+  // Handle comparison requests
+  if (intent.startsWith("compare_")) {
+    const parts = intent.replace("compare_", "").split("_vs_");
+    if (parts.length === 2) {
+      const comp = compareStocks(parts[0], parts[1]);
+      if (comp) {
+        return {
+          intent,
+          message: `LYNCH Stock Comparison: ${comp.stockA.symbol} vs ${comp.stockB.symbol}. ${comp.verdict}`,
+          comparison: comp,
+          followUps: [
+            `Analyse ${comp.stockA.symbol}`,
+            `Analyse ${comp.stockB.symbol}`,
+            `Show me investment ideas`,
+          ],
+        };
+      }
+    }
+  }
+
+  // Handle portfolio context queries
+  if (intent.startsWith("portfolio_context_")) {
+    const symbol = intent.replace("portfolio_context_", "").toUpperCase();
+    const portCtx = analyzeStockInPortfolioContext(symbol);
+    if (portCtx) {
+      return {
+        intent,
+        message: `LYNCH Portfolio Integration Analysis for ${portCtx.stock.symbol}: ${portCtx.portfolioRiskImpact}`,
+        portfolioContext: portCtx,
+        stockProfile: portCtx.stock,
+        followUps: [
+          `Analyse ${portCtx.stock.symbol}`,
+          `How risky is my portfolio?`,
+          `Give me investment ideas`,
+        ],
+      };
+    }
+  }
+
+  // Handle sector research queries
+  if (intent === "sector_research") {
+    const summaries = getSectorResearchSummaries();
+    return {
+      intent: "sector_research",
+      message: "Here is the LYNCH Sector Intelligence breakdown across primary domestic sectors in our demo research universe.",
+      sectorSummaries: summaries,
+      followUps: [
+        "Analyse TCS",
+        "Analyse ICICIBANK",
+        "Analyse RELIANCE",
+      ],
+    };
+  }
+
   return RESPONSES[intent] ?? RESPONSES["fallback"];
 }
 
