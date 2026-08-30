@@ -9,8 +9,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React, { useState, useEffect } from "react";
-import Header from "@/ui/navigation/Header";
-import Sidebar from "@/ui/navigation/Sidebar";
 import PortfolioHeader from "./components/PortfolioHeader";
 import PortfolioSummary from "./components/PortfolioSummary";
 import Allocation from "./components/Allocation";
@@ -84,81 +82,79 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070a11] text-white antialiased selection:bg-indigo-500/30">
-      <main className="p-4 sm:p-6 md:p-8 space-y-8 max-w-6xl mx-auto w-full">
-        {/* Header Bar */}
-        <PortfolioHeader
-          isConnected={isConnected}
-          connectedBroker={connectedBroker}
-          onOpenConnector={() => setConnectorOpen(true)}
-          onOpenManualModal={() => setManualModalOpen(true)}
-        />
+    <div className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
+      {/* Header Bar */}
+      <PortfolioHeader
+        isConnected={isConnected}
+        connectedBroker={connectedBroker}
+        onOpenConnector={() => setConnectorOpen(true)}
+        onOpenManualModal={() => setManualModalOpen(true)}
+      />
 
-        {/* Portfolio Snapshot Cards */}
-        <PortfolioSummary summary={summary} />
+      {/* Portfolio Snapshot Cards */}
+      <PortfolioSummary summary={summary} />
 
-        {/* Navigation Tabs Bar */}
-        <div className="flex border-b border-white/[0.06] space-x-6 text-xs font-semibold">
-          {[
-            { id: "overview", label: "Overview" },
-            { id: "holdings", label: "Holdings" },
-            { id: "allocation", label: "Allocation" },
-            { id: "performance", label: "Performance" },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as ActiveTab)}
-              className={[
-                "pb-3 transition-colors relative font-bold uppercase tracking-wider text-[11px]",
-                activeTab === tab.id
-                  ? "text-indigo-400 font-extrabold"
-                  : "text-gray-400 hover:text-gray-200",
-              ].join(" ")}
-            >
-              {tab.label}
-              {activeTab === tab.id && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-full" />
-              )}
-            </button>
-          ))}
-        </div>
+      {/* Navigation Tabs Bar */}
+      <div className="flex border-b border-white/[0.06] space-x-6 text-xs font-semibold">
+        {[
+          { id: "overview", label: "Overview" },
+          { id: "holdings", label: "Holdings" },
+          { id: "allocation", label: "Allocation" },
+          { id: "performance", label: "Performance" },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as ActiveTab)}
+            className={[
+              "pb-3 transition-colors relative",
+              activeTab === tab.id
+                ? "text-indigo-400 font-bold"
+                : "text-gray-400 hover:text-gray-200",
+            ].join(" ")}
+          >
+            {tab.label}
+            {activeTab === tab.id && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-full" />
+            )}
+          </button>
+        ))}
+      </div>
 
-        {/* Tab Content Panels */}
-        {activeTab === "overview" && (
-          <div className="space-y-6">
-            {/* Allocation & Risk Intelligence */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Allocation holdings={currentHoldings} totalValue={summary.totalValue} />
-              <RiskInsights holdings={currentHoldings} />
-            </div>
-
-            {/* Performance Trend */}
-            <PerformanceChart />
-
-            {/* Top Holdings Table */}
-            <HoldingsTable
-              holdings={currentHoldings}
-              onRemoveHolding={handleRemoveHolding}
-            />
-          </div>
-        )}
-
-        {activeTab === "holdings" && (
-          <HoldingsTable
-            holdings={currentHoldings}
-            onRemoveHolding={handleRemoveHolding}
-          />
-        )}
-
-        {activeTab === "allocation" && (
+      {/* Tab Content Panels */}
+      {activeTab === "overview" && (
+        <div className="space-y-6">
+          {/* Allocation & Risk Intelligence */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Allocation holdings={currentHoldings} totalValue={summary.totalValue} />
             <RiskInsights holdings={currentHoldings} />
           </div>
-        )}
 
-        {activeTab === "performance" && <PerformanceChart />}
-      </main>
+          {/* Performance Trend */}
+          <PerformanceChart />
+
+          {/* Top Holdings Table */}
+          <HoldingsTable
+            holdings={currentHoldings}
+            onRemoveHolding={handleRemoveHolding}
+          />
+        </div>
+      )}
+
+      {activeTab === "holdings" && (
+        <HoldingsTable
+          holdings={currentHoldings}
+          onRemoveHolding={handleRemoveHolding}
+        />
+      )}
+
+      {activeTab === "allocation" && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Allocation holdings={currentHoldings} totalValue={summary.totalValue} />
+          <RiskInsights holdings={currentHoldings} />
+        </div>
+      )}
+
+      {activeTab === "performance" && <PerformanceChart />}
 
       {/* Connect Portfolio Modal */}
       <PortfolioConnector
