@@ -3,90 +3,184 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/page.tsx
 //
-// LYNCH Portfolio Analyzer Route.
-// Integrates Overview, Allocation, Risk, Performance, Holdings Table, and LYNCH Insights.
-// Dispatches session activity event on initial load without breaking teammates' systems.
+// LYNCH Portfolio Feature Route.
+// Completely redesigned into a clean, modern, AI-finance interface.
+// Features tab navigation, Connect Portfolio modal flow, Manual Entry, and reactive client state.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/ui/navigation/Header";
 import Sidebar from "@/ui/navigation/Sidebar";
-import PortfolioOverview from "@/ui/portfolio/PortfolioOverview";
-import PortfolioAllocation from "@/ui/portfolio/PortfolioAllocation";
-import PortfolioRisk from "@/ui/portfolio/PortfolioRisk";
-import PortfolioPerformance from "@/ui/portfolio/PortfolioPerformance";
-import HoldingsTable from "@/ui/portfolio/HoldingsTable";
-import LynchInsights from "@/ui/portfolio/LynchInsights";
-import { getPortfolioSummary, DEMO_HOLDINGS } from "@/ui/data/portfolio";
+import PortfolioHeader from "./components/PortfolioHeader";
+import PortfolioSummary from "./components/PortfolioSummary";
+import Allocation from "./components/Allocation";
+import RiskInsights from "./components/RiskInsights";
+import HoldingsTable from "./components/HoldingsTable";
+import PerformanceChart from "./components/PerformanceChart";
+import PortfolioConnector from "./components/PortfolioConnector";
+import ManualEntryModal from "./components/ManualEntryModal";
+import { INITIAL_DEMO_HOLDINGS } from "./data/demo-data";
+import { Holding } from "./types";
+import { calculatePortfolioSummary, recalculateAllocations } from "./utils";
 import { emitAgentEvent } from "@/agent/events";
 
-export default function PortfolioPage() {
-  const summary = getPortfolioSummary();
+type ActiveTab = "overview" | "holdings" | "allocation" | "performance";
 
-  // On mount: Emit portfolio analysis event into LYNCH session activity feed
+export default function PortfolioPage() {
+  const [holdings, setHoldings] = useState<Holding[]>(INITIAL_DEMO_HOLDINGS);
+  const [activeTab, setActiveTab] = useState<ActiveTab>("overview");
+  const [isConnected, setIsConnected] = useState(true);
+  const [connectedBroker, setConnectedBroker] = useState("Zerodha (Demo)");
+  const [connectorOpen, setConnectorOpen] = useState(false);
+  const [manualModalOpen, setManualModalOpen] = useState(false);
+
+  // Recalculate allocations whenever holdings change
+  const currentHoldings = recalculateAllocations(holdings);
+  const summary = calculatePortfolioSummary(currentHoldings, isConnected, connectedBroker);
+
+  // On mount: Dispatches LYNCH Activity event safely
   useEffect(() => {
     try {
       emitAgentEvent({
         icon: "insight",
-        text: "LYNCH analyzed demo portfolio risk & asset allocation",
+        text: "LYNCH portfolio risk intelligence scan completed",
       });
     } catch {
-      // Gracefully handle if teammate event system is uninitialized
+      // Ignore if event system uninitialized
     }
   }, []);
 
+  const handleAddHolding = (newHolding: Holding) => {
+    const updated = [newHolding, ...holdings];
+    setHoldings(updated);
+
+    try {
+      emitAgentEvent({
+        icon: "insight",
+        text: `Manual holding added: ${newHolding.symbol} (${newHolding.quantity} qty)`,
+      });
+    } catch {
+      // Safe fallback
+    }
+  };
+
+  const handleRemoveHolding = (symbol: string) => {
+    const updated = holdings.filter((h) => h.symbol !== symbol);
+    setHoldings(updated);
+  };
+
+  const handleConnected = (brokerName: string) => {
+    setIsConnected(true);
+    setConnectedBroker(brokerName);
+
+    try {
+      emitAgentEvent({
+        icon: "alert",
+        text: `Portfolio imported via ${brokerName}`,
+      });
+    } catch {
+      // Safe fallback
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#070a11] text-gray-100 flex">
-      {/* Fixed Sidebar */}
-      <Sidebar activeItem="overview" />
+      {/* Sidebar Navigation */}
+      <Sidebar activeItem="portfolio" />
 
-      {/* Main Content Area */}
+      {/* Main Container */}
       <div className="flex-1 lg:pl-60 flex flex-col min-w-0">
         <Header title="Portfolio Analyzer" />
 
         <main className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
-          {/* Top Title Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-white/[0.06]">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <span>📊 Portfolio Analyzer</span>
-              </h1>
-              <p className="text-xs text-gray-400 mt-1">
-                Deterministic composition, concentration, performance, and risk analysis.
-              </p>
-            </div>
-            <div className="self-start sm:self-auto px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold">
-              Self-Contained Demo
-            </div>
+          {/* Header Bar */}
+          <PortfolioHeader
+            isConnected={isConnected}
+            connectedBroker={connectedBroker}
+            onOpenConnector={() => setConnectorOpen(true)}
+            onOpenManualModal={() => setManualModalOpen(true)}
+          />
+
+          {/* Portfolio Snapshot Cards */}
+          <PortfolioSummary summary={summary} />
+
+          {/* Navigation Tabs Bar */}
+          <div className="flex border-b border-white/[0.06] space-x-6 text-xs font-semibold">
+            {[
+              { id: "overview", label: "Overview" },
+              { id: "holdings", label: "Holdings" },
+              { id: "allocation", label: "Allocation" },
+              { id: "performance", label: "Performance" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as ActiveTab)}
+                className={[
+                  "pb-3 transition-colors relative",
+                  activeTab === tab.id
+                    ? "text-indigo-400 font-bold"
+                    : "text-gray-400 hover:text-gray-200",
+                ].join(" ")}
+              >
+                {tab.label}
+                {activeTab === tab.id && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-full" />
+                )}
+              </button>
+            ))}
           </div>
 
-          {/* 1. Portfolio Overview Cards */}
-          <PortfolioOverview summary={summary} />
+          {/* Tab Content Panels */}
+          {activeTab === "overview" && (
+            <div className="space-y-6">
+              {/* Allocation & Risk Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Allocation holdings={currentHoldings} totalValue={summary.totalValue} />
+                <RiskInsights holdings={currentHoldings} />
+              </div>
 
-          {/* 2. Middle Row: Allocation, Risk & Performance */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1">
-              <PortfolioAllocation holdings={DEMO_HOLDINGS} />
-            </div>
-            <div className="lg:col-span-1">
-              <PortfolioRisk />
-            </div>
-            <div className="lg:col-span-1">
-              <PortfolioPerformance />
-            </div>
-          </div>
+              {/* Performance Trend */}
+              <PerformanceChart />
 
-          {/* 3. Bottom Row: Holdings Table & LYNCH Insights */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <HoldingsTable holdings={DEMO_HOLDINGS} />
+              {/* Top Holdings Table */}
+              <HoldingsTable
+                holdings={currentHoldings}
+                onRemoveHolding={handleRemoveHolding}
+              />
             </div>
-            <div className="lg:col-span-1">
-              <LynchInsights />
+          )}
+
+          {activeTab === "holdings" && (
+            <HoldingsTable
+              holdings={currentHoldings}
+              onRemoveHolding={handleRemoveHolding}
+            />
+          )}
+
+          {activeTab === "allocation" && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Allocation holdings={currentHoldings} totalValue={summary.totalValue} />
+              <RiskInsights holdings={currentHoldings} />
             </div>
-          </div>
+          )}
+
+          {activeTab === "performance" && <PerformanceChart />}
         </main>
       </div>
+
+      {/* Connect Portfolio Modal */}
+      <PortfolioConnector
+        isOpen={connectorOpen}
+        onClose={() => setConnectorOpen(false)}
+        onConnected={handleConnected}
+      />
+
+      {/* Manual Entry Modal */}
+      <ManualEntryModal
+        isOpen={manualModalOpen}
+        onClose={() => setManualModalOpen(false)}
+        onAddHolding={handleAddHolding}
+      />
     </div>
   );
 }
