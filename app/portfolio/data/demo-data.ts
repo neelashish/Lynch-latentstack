@@ -1,8 +1,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/data/demo-data.ts
 //
-// Initial portfolio holdings & historical demo performance trend dataset.
-// Reuses standard LYNCH values (₹12,45,000 baseline) and stock universe.
+// Shared central dataset for the LYNCH Portfolio Feature.
+// Safe for hydration (fixed initial constants, no Math.random/Date.now during render).
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { Holding, PerformancePoint } from "../types";

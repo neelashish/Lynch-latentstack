@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/types.ts
 //
-// Self-contained TypeScript definitions for the LYNCH Portfolio Feature.
+// Types for the self-contained LYNCH Portfolio Feature.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type RiskLevel = "LOW" | "MEDIUM" | "HIGH";

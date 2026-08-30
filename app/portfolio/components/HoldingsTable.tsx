@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/components/HoldingsTable.tsx
 //
-// Top Holdings table component.
+// Clean holdings table component showing Symbol, Company, Quantity, Avg Price, Current Price, P&L, Allocation %.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from "react";
@@ -19,6 +19,7 @@ interface HoldingsTableProps {
 export default function HoldingsTable({ holdings, onRemoveHolding }: HoldingsTableProps) {
   return (
     <Card padding="md" className="overflow-hidden bg-[#0d1117]/80">
+      {/* Title */}
       <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] mb-3">
         <div className="flex items-center gap-2">
           <Table size={16} className="text-indigo-400" />
@@ -29,6 +30,7 @@ export default function HoldingsTable({ holdings, onRemoveHolding }: HoldingsTab
         </span>
       </div>
 
+      {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs text-gray-300">
           <thead className="bg-[#070a11] text-[10px] uppercase tracking-wider text-gray-500 font-semibold border-b border-white/[0.06]">
@@ -116,7 +118,7 @@ export default function HoldingsTable({ holdings, onRemoveHolding }: HoldingsTab
                       <button
                         onClick={() => onRemoveHolding(h.symbol)}
                         className="text-[10px] text-gray-500 hover:text-rose-400 transition-colors"
-                        title="Remove position"
+                        title="Remove holding"
                       >
                         Remove
                       </button>

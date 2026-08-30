@@ -3,7 +3,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/components/PortfolioConnector.tsx
 //
-// Connect Portfolio Modal component.
+// "Connect your portfolio" flow modal.
+// Features connector selection (Zerodha, Groww, Upstox, CoinDCX, Manual) and demo auth.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React, { useState } from "react";

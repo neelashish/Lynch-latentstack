@@ -3,7 +3,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/components/PortfolioSummary.tsx
 //
-// PORTFOLIO SNAPSHOT metrics cards (Value, Today's Change, Overall Risk, Holdings).
+// PORTFOLIO SNAPSHOT cards (Value, Today's Change, Risk, Holdings).
+// Clean, modern, sophisticated dark style.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from "react";
@@ -35,6 +36,7 @@ export default function PortfolioSummary({ summary }: PortfolioSummaryProps) {
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Value */}
         <Card padding="md" className="relative overflow-hidden bg-[#0d1117]/80 backdrop-blur">
           <div className="flex items-center justify-between">
             <p className="text-xs font-medium text-gray-400">Portfolio Value</p>
@@ -48,6 +50,7 @@ export default function PortfolioSummary({ summary }: PortfolioSummaryProps) {
           <p className="text-[11px] text-gray-500 mt-1">Total Demo Equity Value</p>
         </Card>
 
+        {/* Today's Change */}
         <Card padding="md" className="relative overflow-hidden bg-[#0d1117]/80 backdrop-blur">
           <div className="flex items-center justify-between">
             <p className="text-xs font-medium text-gray-400">Today&apos;s Change</p>
@@ -63,6 +66,7 @@ export default function PortfolioSummary({ summary }: PortfolioSummaryProps) {
           </p>
         </Card>
 
+        {/* Overall Risk */}
         <Card padding="md" className="relative overflow-hidden bg-[#0d1117]/80 backdrop-blur">
           <div className="flex items-center justify-between">
             <p className="text-xs font-medium text-gray-400">Overall Risk</p>
@@ -76,6 +80,7 @@ export default function PortfolioSummary({ summary }: PortfolioSummaryProps) {
           <p className="text-[11px] text-gray-500 mt-1">Single stock &gt; 30% rule</p>
         </Card>
 
+        {/* Holdings Count */}
         <Card padding="md" className="relative overflow-hidden bg-[#0d1117]/80 backdrop-blur">
           <div className="flex items-center justify-between">
             <p className="text-xs font-medium text-gray-400">Holdings</p>

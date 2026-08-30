@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/components/PortfolioHeader.tsx
 //
-// Header for Portfolio section showing Title, Subtitle, and Connect Portfolio action.
+// Header bar for Portfolio Analyzer with title, subtitle, and Connect Portfolio button.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from "react";
@@ -34,6 +34,7 @@ export default function PortfolioHeader({
       </div>
 
       <div className="flex items-center gap-3 self-start sm:self-auto">
+        {/* Manual Add Button */}
         <button
           onClick={onOpenManualModal}
           className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#0d1117] border border-white/[0.1] text-gray-300 hover:text-white hover:border-white/[0.2] transition-colors"
@@ -41,6 +42,7 @@ export default function PortfolioHeader({
           + Add Holding
         </button>
 
+        {/* Connect Portfolio Button */}
         {isConnected ? (
           <button
             onClick={onOpenConnector}

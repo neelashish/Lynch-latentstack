@@ -1,12 +1,12 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/utils.ts
 //
-// Pure deterministic utility functions for portfolio summary metrics, allocation, and risk evaluation.
+// Pure deterministic analysis calculations for portfolio metrics, sectors, and risk rules.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { Holding, PortfolioSummary, SectorAllocation, RiskRuleCheck } from "./types";
 
-/** Compute overall summary from holdings */
+/** Compute portfolio metrics deterministically from active holdings */
 export function calculatePortfolioSummary(
   holdings: Holding[],
   isConnected = true,
@@ -17,9 +17,11 @@ export function calculatePortfolioSummary(
   const totalReturnAbs = totalValue - totalCost;
   const totalReturnPct = totalCost > 0 ? (totalReturnAbs / totalCost) * 100 : 0;
 
-  const todayChangeAbs = Math.round(totalValue * 0.0124); // +1.24% today
+  // Today's change fixed estimate for demo
+  const todayChangeAbs = Math.round(totalValue * 0.0124); // +1.24%
   const todayChangePct = 1.24;
 
+  // Risk Level rule: If any stock allocation > 30%, Moderate/High
   const maxAlloc = holdings.length > 0 ? Math.max(...holdings.map((h) => h.allocationPct)) : 0;
   const overallRisk: "Low" | "Moderate" | "High" =
     maxAlloc > 35 ? "High" : maxAlloc > 25 ? "Moderate" : "Low";
@@ -37,7 +39,7 @@ export function calculatePortfolioSummary(
   };
 }
 
-/** Recalculate allocation percentage weights dynamically */
+/** Recalculate allocation percentages for holdings */
 export function recalculateAllocations(holdings: Holding[]): Holding[] {
   const totalVal = holdings.reduce((sum, h) => sum + h.quantity * h.currentPrice, 0);
   if (totalVal === 0) return holdings;
@@ -67,7 +69,7 @@ export function getSectorAllocations(holdings: Holding[]): SectorAllocation[] {
     .sort((a, b) => b.allocationPct - a.allocationPct);
 }
 
-/** Deterministic Risk Evaluation Engine */
+/** Deterministic Risk Engine */
 export function evaluatePortfolioRisk(holdings: Holding[]): {
   overallRisk: "LOW" | "MODERATE" | "HIGH";
   rules: RiskRuleCheck[];
@@ -80,11 +82,11 @@ export function evaluatePortfolioRisk(holdings: Holding[]): {
         {
           id: "rule-empty",
           type: "info",
-          title: "No Holdings Detected",
-          description: "Connect or add custom positions to evaluate portfolio risk.",
+          title: "No Holdings",
+          description: "Connect or add holdings to evaluate risk.",
         },
       ],
-      insights: ["No active positions detected in portfolio."],
+      insights: ["No active positions detected."],
     };
   }
 
@@ -93,13 +95,13 @@ export function evaluatePortfolioRisk(holdings: Holding[]): {
   const rules: RiskRuleCheck[] = [];
   const insights: string[] = [];
 
-  // Rule 1: Single Holding Concentration Threshold > 30%
+  // Rule 1: Single stock threshold > 30% -> HIGH CONCENTRATION
   if (largestHolding.allocationPct > 30) {
     rules.push({
       id: "rule-single-concentration",
       type: "warning",
       title: `HIGH CONCENTRATION IN ${largestHolding.symbol}`,
-      description: `${largestHolding.symbol} accounts for ${largestHolding.allocationPct}% of total portfolio value (Threshold: > 30%).`,
+      description: `${largestHolding.symbol} represents ${largestHolding.allocationPct}% of total portfolio value (Threshold: > 30%).`,
     });
     insights.push(`${largestHolding.symbol} is the largest portfolio exposure (${largestHolding.allocationPct}%).`);
   } else {
@@ -118,7 +120,7 @@ export function evaluatePortfolioRisk(holdings: Holding[]): {
     rules.push({
       id: "rule-sector-tech",
       type: "warning",
-      title: "Significant Tech Sector Exposure",
+      title: "Significant Tech Exposure",
       description: `Technology sector represents ${techSector.allocationPct}% of equity value.`,
     });
     insights.push(`Technology sector exposure is significant at ${techSector.allocationPct}% of portfolio.`);
@@ -129,14 +131,14 @@ export function evaluatePortfolioRisk(holdings: Holding[]): {
     rules.push({
       id: "rule-diversification",
       type: "success",
-      title: "Diversified Holding Base",
+      title: "Diversified Portfolio Base",
       description: `Portfolio is spread across ${holdings.length} distinct holdings in ${sectors.length} sectors.`,
     });
   } else {
     rules.push({
       id: "rule-diversification",
       type: "warning",
-      title: "Concentrated Positions",
+      title: "Concentrated Holding Count",
       description: "Portfolio contains fewer than 5 active positions.",
     });
   }

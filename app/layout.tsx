@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/ui/navigation/Sidebar";
@@ -14,16 +16,37 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "LYNCH | AI Financial Intelligence",
-  description: "AI-powered financial research assistant.",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [collapsed, setCollapsed] = useState(false);
+
+  // Safely restore collapsed preference after mount to ensure zero hydration mismatch
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("lynch_sidebar_collapsed");
+      if (stored === "true") {
+        setCollapsed(true);
+      }
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, []);
+
+  const handleToggleCollapse = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("lynch_sidebar_collapsed", String(next));
+      } catch {
+        // Ignore localStorage errors
+      }
+      return next;
+    });
+  };
+
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
@@ -31,15 +54,25 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <div className="flex h-screen overflow-hidden">
-          {/* Global Sidebar component */}
-          <Sidebar activeItem="overview" />
+          {/* Global Collapsible Sidebar */}
+          <Sidebar
+            collapsed={collapsed}
+            onToggleCollapse={handleToggleCollapse}
+          />
 
-          {/* Main content area */}
-          <div className="flex-1 flex flex-col min-w-0 h-screen lg:ml-60">
-            {/* Global Header component */}
-            <Header title="Overview" />
+          {/* Main Content Area — Resizes dynamically with sidebar */}
+          <div
+            className={`flex-1 flex flex-col min-w-0 h-screen transition-all duration-300 ease-in-out ${
+              collapsed ? "lg:ml-16" : "lg:ml-60"
+            }`}
+          >
+            {/* Global Header */}
+            <Header
+              sidebarCollapsed={collapsed}
+              onToggleSidebar={handleToggleCollapse}
+            />
 
-            {/* Page content */}
+            {/* Page Content */}
             <main className="flex-1 overflow-y-auto">
               {children}
             </main>

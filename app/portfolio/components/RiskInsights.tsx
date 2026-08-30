@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/components/RiskInsights.tsx
 //
-// Risk Intelligence evaluation & LYNCH Observations component.
+// Clean Risk Intelligence & LYNCH Observations panel.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from "react";
@@ -22,6 +22,7 @@ export default function RiskInsights({ holdings }: RiskInsightsProps) {
   return (
     <Card padding="md" className="flex flex-col justify-between h-full bg-[#0d1117]/80">
       <div>
+        {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
             <ShieldAlert size={16} className="text-amber-400" />
@@ -32,6 +33,7 @@ export default function RiskInsights({ holdings }: RiskInsightsProps) {
           </span>
         </div>
 
+        {/* Evaluated Rules */}
         <div className="mt-4 space-y-2.5">
           {analysis.rules.map((rule) => {
             const isWarning = rule.type === "warning";
@@ -69,6 +71,7 @@ export default function RiskInsights({ holdings }: RiskInsightsProps) {
           })}
         </div>
 
+        {/* LYNCH Observations */}
         <div className="mt-4 pt-3 border-t border-white/[0.06]">
           <div className="flex items-center gap-1.5 mb-2">
             <Zap size={13} className="text-indigo-400" />
@@ -87,6 +90,7 @@ export default function RiskInsights({ holdings }: RiskInsightsProps) {
         </div>
       </div>
 
+      {/* Mandatory Disclaimer */}
       <div className="mt-4 pt-3 border-t border-white/[0.06]">
         <div className="flex items-center gap-1.5 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300">
           <AlertCircle size={13} className="shrink-0 text-amber-400" />

@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/components/Allocation.tsx
 //
-// Allocation breakdown component by holding and sector.
+// Clean visualization for Portfolio Allocation by Holding or Sector.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React, { useState } from "react";
@@ -25,6 +25,7 @@ export default function Allocation({ holdings, totalValue }: AllocationProps) {
 
   return (
     <Card padding="md" className="flex flex-col h-full bg-[#0d1117]/80">
+      {/* Title & View Switch */}
       <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
         <div className="flex items-center gap-2">
           <PieChart size={16} className="text-indigo-400" />
@@ -57,6 +58,7 @@ export default function Allocation({ holdings, totalValue }: AllocationProps) {
         </div>
       </div>
 
+      {/* Stacked Progress Bar */}
       <div className="mt-4">
         <div className="h-3 w-full bg-[#070a11] rounded-full overflow-hidden flex p-0.5 border border-white/[0.06]">
           {viewMode === "holding"
@@ -85,6 +87,7 @@ export default function Allocation({ holdings, totalValue }: AllocationProps) {
         </div>
       </div>
 
+      {/* List items */}
       <div className="mt-4 space-y-2.5 flex-1 overflow-y-auto max-h-[220px] pr-1">
         {viewMode === "holding"
           ? holdings.map((h, i) => (

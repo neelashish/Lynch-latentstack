@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/components/PerformanceChart.tsx
 //
-// 6-Month portfolio performance chart.
+// Performance chart visualizing historical performance trends (demo series).
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from "react";

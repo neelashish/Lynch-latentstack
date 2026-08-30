@@ -3,9 +3,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/page.tsx
 //
-// Main Portfolio Feature Route.
-// Redesigned with dark AI-finance aesthetics, tabbed sections, snapshot metrics,
-// portfolio connector flow, and manual position entry.
+// LYNCH Portfolio Feature Route.
+// Completely redesigned into a clean, modern, AI-finance interface.
+// Features tab navigation, Connect Portfolio modal flow, Manual Entry, and reactive client state.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React, { useState, useEffect } from "react";
@@ -34,9 +34,11 @@ export default function PortfolioPage() {
   const [connectorOpen, setConnectorOpen] = useState(false);
   const [manualModalOpen, setManualModalOpen] = useState(false);
 
+  // Recalculate allocations whenever holdings change
   const currentHoldings = recalculateAllocations(holdings);
   const summary = calculatePortfolioSummary(currentHoldings, isConnected, connectedBroker);
 
+  // On mount: Dispatches LYNCH Activity event safely
   useEffect(() => {
     try {
       emitAgentEvent({
@@ -44,7 +46,7 @@ export default function PortfolioPage() {
         text: "LYNCH portfolio risk intelligence scan completed",
       });
     } catch {
-      // Ignore if uninitialized
+      // Ignore if event system uninitialized
     }
   }, []);
 
@@ -55,7 +57,7 @@ export default function PortfolioPage() {
     try {
       emitAgentEvent({
         icon: "insight",
-        text: `Manual position added: ${newHolding.symbol} (${newHolding.quantity} qty)`,
+        text: `Manual holding added: ${newHolding.symbol} (${newHolding.quantity} qty)`,
       });
     } catch {
       // Safe fallback
@@ -83,12 +85,15 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-[#070a11] text-gray-100 flex">
+      {/* Sidebar Navigation */}
       <Sidebar activeItem="portfolio" />
 
+      {/* Main Container */}
       <div className="flex-1 lg:pl-60 flex flex-col min-w-0">
         <Header title="Portfolio Analyzer" />
 
         <main className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
+          {/* Header Bar */}
           <PortfolioHeader
             isConnected={isConnected}
             connectedBroker={connectedBroker}
@@ -96,9 +101,10 @@ export default function PortfolioPage() {
             onOpenManualModal={() => setManualModalOpen(true)}
           />
 
+          {/* Portfolio Snapshot Cards */}
           <PortfolioSummary summary={summary} />
 
-          {/* Sub-Navigation Tabs */}
+          {/* Navigation Tabs Bar */}
           <div className="flex border-b border-white/[0.06] space-x-6 text-xs font-semibold">
             {[
               { id: "overview", label: "Overview" },
@@ -124,16 +130,19 @@ export default function PortfolioPage() {
             ))}
           </div>
 
-          {/* Active Tab Panel Views */}
+          {/* Tab Content Panels */}
           {activeTab === "overview" && (
             <div className="space-y-6">
+              {/* Allocation & Risk Intelligence */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Allocation holdings={currentHoldings} totalValue={summary.totalValue} />
                 <RiskInsights holdings={currentHoldings} />
               </div>
 
+              {/* Performance Trend */}
               <PerformanceChart />
 
+              {/* Top Holdings Table */}
               <HoldingsTable
                 holdings={currentHoldings}
                 onRemoveHolding={handleRemoveHolding}
@@ -159,12 +168,14 @@ export default function PortfolioPage() {
         </main>
       </div>
 
+      {/* Connect Portfolio Modal */}
       <PortfolioConnector
         isOpen={connectorOpen}
         onClose={() => setConnectorOpen(false)}
         onConnected={handleConnected}
       />
 
+      {/* Manual Entry Modal */}
       <ManualEntryModal
         isOpen={manualModalOpen}
         onClose={() => setManualModalOpen(false)}

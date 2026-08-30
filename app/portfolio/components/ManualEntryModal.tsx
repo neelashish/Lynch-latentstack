@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // app/portfolio/components/ManualEntryModal.tsx
 //
-// Manual holding entry form component.
+// Allows users to manually add custom holdings to the portfolio state.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React, { useState } from "react";
@@ -40,7 +40,7 @@ export default function ManualEntryModal({
       quantity: Number(quantity) || 1,
       avgPrice: Number(avgPrice) || 1000,
       currentPrice: Number(currentPrice) || 1000,
-      allocationPct: 0,
+      allocationPct: 0, // Recalculated dynamically
       risk,
     };
 
