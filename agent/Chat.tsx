@@ -552,7 +552,21 @@ function StockResearchCard({ profile }: { profile: StockResearchProfile }) {
           <span className="font-bold text-indigo-400 not-italic">LYNCH Takeaway: </span>
           {profile.lynchTakeaway}
         </p>
-        <span className="text-gray-600 font-mono shrink-0 ml-2">DEMO RESEARCH</span>
+        <div className="flex items-center gap-2 shrink-0 ml-2 font-mono">
+          <a
+            href={`/chat?q=How%20does%20${profile.symbol}%20affect%20my%20portfolio%3F`}
+            className="text-indigo-400 hover:text-indigo-300 font-bold underline"
+          >
+            Portfolio Impact
+          </a>
+          <span className="text-gray-600">&middot;</span>
+          <a
+            href="/portfolio"
+            className="text-gray-400 hover:text-white"
+          >
+            Portfolio
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -683,13 +697,14 @@ function PromptChip({
 // Main Chat component
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function LynchChat() {
+export default function LynchChat({ initialQuery }: { initialQuery?: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
   const [context, setContext] = useState<ConversationContext>({});
   // greeting is stable across renders — computed once on mount (client-only)
   const [greeting] = useState<string>(getGreeting);
+  const hasDispatchedInitial = useRef(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -700,6 +715,14 @@ export default function LynchChat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isThinking]);
+
+  // Handle URL pre-filled initial query on mount
+  useEffect(() => {
+    if (initialQuery && !hasDispatchedInitial.current) {
+      hasDispatchedInitial.current = true;
+      void send(initialQuery);
+    }
+  }, [initialQuery]);
 
   // ── Core send handler ────────────────────────────────────────────────────
   const send = useCallback(

@@ -34,6 +34,14 @@ export default function PortfolioHeader({
       </div>
 
       <div className="flex items-center gap-3 self-start sm:self-auto">
+        {/* Ask LYNCH Co-Pilot Button */}
+        <a
+          href="/chat?q=Show%20me%20my%20portfolio"
+          className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600/10 border border-indigo-500/20 text-indigo-300 hover:bg-indigo-600/20 transition-colors flex items-center gap-1.5"
+        >
+          <span>Ask LYNCH Co-Pilot</span>
+        </a>
+
         {/* Manual Add Button */}
         <button
           onClick={onOpenManualModal}

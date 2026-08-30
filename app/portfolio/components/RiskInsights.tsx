@@ -73,11 +73,19 @@ export default function RiskInsights({ holdings }: RiskInsightsProps) {
 
         {/* LYNCH Observations */}
         <div className="mt-4 pt-3 border-t border-white/[0.06]">
-          <div className="flex items-center gap-1.5 mb-2">
-            <Zap size={13} className="text-indigo-400" />
-            <p className="text-[11px] font-bold uppercase text-indigo-300 tracking-wide">
-              LYNCH Observations
-            </p>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1.5">
+              <Zap size={13} className="text-indigo-400" />
+              <p className="text-[11px] font-bold uppercase text-indigo-300 tracking-wide">
+                LYNCH Observations
+              </p>
+            </div>
+            <a
+              href="/chat?q=How%20risky%20is%20my%20portfolio%3F"
+              className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300"
+            >
+              Ask LYNCH Co-Pilot →
+            </a>
           </div>
           <ul className="space-y-1.5 text-xs text-gray-300">
             {analysis.insights.map((insight, idx) => (

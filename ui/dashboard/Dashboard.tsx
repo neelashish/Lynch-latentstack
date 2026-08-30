@@ -121,11 +121,11 @@ export default function Dashboard({
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
               </span>
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                AGENT ACTIVE
+                Agent Active
               </span>
             </div>
             <p className="text-[11px] text-gray-400 font-medium">
-              Monitoring portfolio &middot; Analyzing market signals
+              Monitoring demo portfolio &middot; Analyzing market signals
             </p>
           </div>
         </div>
@@ -255,7 +255,7 @@ export default function Dashboard({
                 <span>View Portfolio Details</span>
               </Link>
               <Link
-                href="/chat"
+                href="/chat?q=How%20does%20TCS%20affect%20my%20portfolio%3F"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white shadow-xl shadow-indigo-950/50 transition-all hover:scale-[1.02]"
               >
                 <span>Ask LYNCH Co-Pilot</span>
@@ -429,7 +429,7 @@ export default function Dashboard({
             </Link>
 
             <Link
-              href="/chat"
+              href="/chat?q=Show%20me%20my%20portfolio"
               className="p-4 rounded-2xl border border-indigo-500/30 bg-indigo-950/20 hover:bg-indigo-900/30 transition-all text-center space-y-2 group"
             >
               <div className="mx-auto h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-950/60 group-hover:scale-105 transition-transform">
