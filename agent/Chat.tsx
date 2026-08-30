@@ -168,9 +168,9 @@ function AnalysisCard({
   analysis: NonNullable<LynchResponse["analysis"]>;
 }) {
   return (
-    <div className="mt-3 rounded-xl border border-gray-700/50 bg-gray-950/60 overflow-hidden text-left">
+    <div className="mt-3 rounded-2xl border border-white/[0.08] bg-[#0d1117] overflow-hidden text-left shadow-lg">
       {/* ── Card header: subject + price + badges ── */}
-      <div className="px-3.5 py-2.5 border-b border-gray-700/40 flex items-start justify-between gap-3">
+      <div className="px-4 py-3 border-b border-white/[0.06] flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">
             <span className="text-xs font-bold text-white tracking-wide">
@@ -187,7 +187,7 @@ function AnalysisCard({
                   analysis.change.startsWith("+")
                     ? "text-emerald-400"
                     : analysis.change.startsWith("-")
-                    ? "text-red-400"
+                    ? "text-rose-400"
                     : "text-gray-400"
                 }`}
               >
@@ -204,19 +204,19 @@ function AnalysisCard({
       </div>
 
       {/* ── Reasons ── */}
-      <div className="px-3.5 py-2.5 border-b border-gray-700/40">
-        <p className="text-[9px] uppercase tracking-widest text-gray-600 font-bold mb-2">
+      <div className="px-4 py-3 border-b border-white/[0.06]">
+        <p className="text-[10px] uppercase tracking-widest text-indigo-400 font-black mb-2">
           Analysis
         </p>
         <ul className="space-y-1.5">
           {analysis.reasons.map((reason, i) => (
             <li
               key={i}
-              className="flex items-start gap-1.5 text-[11px] text-gray-400 leading-relaxed"
+              className="flex items-start gap-1.5 text-xs text-gray-300 leading-relaxed"
             >
               <ChevronRight
-                size={11}
-                className="text-indigo-500 mt-0.5 shrink-0"
+                size={12}
+                className="text-indigo-400 mt-0.5 shrink-0"
               />
               {reason}
             </li>
@@ -225,19 +225,19 @@ function AnalysisCard({
       </div>
 
       {/* ── Suggested actions ── */}
-      <div className="px-3.5 py-2.5">
-        <p className="text-[9px] uppercase tracking-widest text-gray-600 font-bold mb-2">
+      <div className="px-4 py-3">
+        <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-2">
           Suggested Actions
         </p>
         <ul className="space-y-1.5">
           {analysis.suggestedActions.map((action, i) => (
             <li
               key={i}
-              className="flex items-start gap-1.5 text-[11px] text-gray-500 leading-relaxed"
+              className="flex items-start gap-1.5 text-xs text-gray-400 leading-relaxed"
             >
               <ArrowRight
-                size={11}
-                className="text-gray-700 mt-0.5 shrink-0"
+                size={12}
+                className="text-gray-500 mt-0.5 shrink-0"
               />
               {action}
             </li>
@@ -258,21 +258,21 @@ function IdeasCard({
   ideasBlock: NonNullable<LynchResponse["ideasBlock"]>;
 }) {
   return (
-    <div className="mt-3 rounded-xl border border-indigo-500/30 bg-gray-950/80 overflow-hidden text-left space-y-3 p-3.5">
+    <div className="mt-3 rounded-2xl border border-indigo-500/30 bg-[#0d1117] overflow-hidden text-left space-y-4 p-4 shadow-xl">
       {/* ── Header & Methodology ── */}
-      <div className="pb-2 border-b border-gray-800">
+      <div className="pb-3 border-b border-white/[0.06]">
         <div className="flex items-center justify-between">
           <span className="text-xs font-black text-indigo-400 tracking-wider uppercase">
             LYNCH INVESTMENT IDEAS
           </span>
-          <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-medium">
+          <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-2.5 py-0.5 rounded-full font-bold">
             {ideasBlock.count} opportunities identified
           </span>
         </div>
-        <p className="text-[10px] text-gray-400 mt-1.5 leading-relaxed">
+        <p className="text-xs text-gray-400 mt-1.5 leading-relaxed">
           {ideasBlock.methodology}
         </p>
-        <div className="mt-2 text-[9px] text-amber-400/90 font-mono bg-amber-500/10 border border-amber-500/20 rounded px-2 py-0.5 inline-block">
+        <div className="mt-2 text-[10px] text-amber-400 font-mono bg-amber-500/10 border border-amber-500/20 rounded-md px-2.5 py-0.5 inline-block">
           {ideasBlock.disclaimer}
         </div>
       </div>
@@ -282,10 +282,10 @@ function IdeasCard({
         {ideasBlock.ideas.map((idea, index) => (
           <div
             key={idea.symbol}
-            className="rounded-lg border border-gray-800 bg-gray-900/60 p-3 hover:border-gray-700 transition-colors"
+            className="rounded-xl border border-white/[0.06] bg-[#070a11] p-3.5 hover:border-white/[0.12] transition-colors"
           >
             {/* Header row */}
-            <div className="flex items-start justify-between gap-2 border-b border-gray-800/60 pb-2">
+            <div className="flex items-start justify-between gap-2 border-b border-white/[0.06] pb-2.5">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-black text-white">
@@ -293,7 +293,7 @@ function IdeasCard({
                   </span>
                   <span className="text-[11px] text-gray-400">({idea.name})</span>
                 </div>
-                <div className="text-[10px] text-indigo-300 font-medium mt-0.5">
+                <div className="text-[10px] text-indigo-300 font-semibold mt-0.5">
                   LYNCH VIEW: {idea.signal}
                 </div>
               </div>
@@ -306,25 +306,25 @@ function IdeasCard({
             <ConfidenceBar value={idea.confidence} />
 
             {/* Thesis */}
-            <div className="mt-2">
-              <p className="text-[9px] uppercase tracking-widest text-gray-500 font-bold">
+            <div className="mt-2.5">
+              <p className="text-[9px] uppercase tracking-widest text-indigo-400 font-black">
                 THESIS
               </p>
-              <p className="text-[11px] text-gray-300 mt-0.5 leading-relaxed">
+              <p className="text-xs text-gray-300 mt-0.5 leading-relaxed">
                 {idea.thesis}
               </p>
             </div>
 
             {/* Why it stands out */}
-            <div className="mt-2">
-              <p className="text-[9px] uppercase tracking-widest text-emerald-400/80 font-bold">
+            <div className="mt-2.5">
+              <p className="text-[9px] uppercase tracking-widest text-emerald-400 font-black">
                 WHY IT STANDS OUT
               </p>
               <ul className="mt-1 space-y-1">
                 {idea.standout.map((item, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-1 text-[11px] text-gray-300"
+                    className="flex items-start gap-1.5 text-xs text-gray-300"
                   >
                     <span className="text-emerald-400 shrink-0">✓</span>
                     <span>{item}</span>
@@ -334,15 +334,15 @@ function IdeasCard({
             </div>
 
             {/* Risks */}
-            <div className="mt-2">
-              <p className="text-[9px] uppercase tracking-widest text-amber-400/80 font-bold">
+            <div className="mt-2.5">
+              <p className="text-[9px] uppercase tracking-widest text-amber-400 font-black">
                 RISKS
               </p>
               <ul className="mt-1 space-y-1">
                 {idea.risks.map((risk, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-1 text-[11px] text-gray-400"
+                    className="flex items-start gap-1.5 text-xs text-gray-400"
                   >
                     <span className="text-amber-400 shrink-0">⚠</span>
                     <span>{risk}</span>
@@ -355,20 +355,20 @@ function IdeasCard({
       </div>
 
       {/* ── Research Priority ── */}
-      <div className="pt-2 border-t border-gray-800">
-        <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-1.5">
+      <div className="pt-3 border-t border-white/[0.06]">
+        <p className="text-[10px] uppercase tracking-widest text-gray-400 font-black mb-2">
           RESEARCH PRIORITY
         </p>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {ideasBlock.priorities.map((item, i) => (
             <div
               key={item.symbol}
-              className="flex items-center justify-between text-[11px] text-gray-300 bg-gray-900/40 px-2.5 py-1 rounded border border-gray-800/50"
+              className="flex items-center justify-between text-xs text-gray-300 bg-[#070a11] px-3 py-1.5 rounded-xl border border-white/[0.05]"
             >
               <span className="font-semibold text-white">
                 {i + 1}. {item.symbol}
               </span>
-              <span className="text-indigo-400 text-[10px]">
+              <span className="text-indigo-400 text-[11px] font-medium">
                 {item.priorityLabel}
               </span>
             </div>
@@ -377,7 +377,7 @@ function IdeasCard({
       </div>
 
       <div className="pt-1 text-center">
-        <p className="text-[11px] text-indigo-300 italic font-medium">
+        <p className="text-xs text-indigo-300 italic font-medium">
           Ask LYNCH about any of these ideas.
         </p>
       </div>
@@ -556,19 +556,19 @@ export default function LynchChat() {
       {/* ╔══════════════════════════════════════════════╗ */}
       {/* ║                  HEADER                      ║ */}
       {/* ╚══════════════════════════════════════════════╝ */}
-      <header className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-gray-800/70 bg-[#070a11]/95 backdrop-blur-md z-10">
+      <header className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/[0.06] bg-[#070a11]/90 backdrop-blur-md z-10">
         {/* Brand */}
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center shadow-lg shadow-indigo-950/60 shrink-0">
-            <Zap size={15} className="text-white" strokeWidth={2.5} />
+            <Zap size={16} className="text-white" strokeWidth={2.5} />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-black text-white tracking-[0.12em] uppercase">
-                LYNCH
+                LYNCH CO-PILOT
               </span>
               {/* Live pulse indicator */}
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 text-indigo-300">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -578,8 +578,8 @@ export default function LynchChat() {
                 </span>
               </span>
             </div>
-            <p className="text-[10px] text-gray-600 font-medium tracking-wide">
-              AI Financial Intelligence
+            <p className="text-[10px] text-gray-500 font-medium tracking-wide">
+              AI Financial Intelligence & Research Interface
             </p>
           </div>
         </div>
@@ -734,9 +734,9 @@ export default function LynchChat() {
       {/* ╚══════════════════════════════════════════════╝ */}
       <footer className="shrink-0 px-4 pb-4 pt-2 bg-[#070a11]/90 backdrop-blur-sm">
         <div
-          className="flex items-center gap-2 bg-gray-900/60 border border-gray-700/50 rounded-2xl
-            px-3.5 py-2 focus-within:border-indigo-500/50 focus-within:ring-1
-            focus-within:ring-indigo-500/15 transition-all duration-200"
+          className="flex items-center gap-2 bg-[#0d1117] border border-white/[0.08] rounded-2xl
+            px-4 py-2.5 focus-within:border-indigo-500/50 focus-within:ring-1
+            focus-within:ring-indigo-500/20 transition-all duration-200"
         >
           <input
             ref={inputRef}
@@ -746,7 +746,7 @@ export default function LynchChat() {
             onKeyDown={handleKeyDown}
             placeholder="Ask LYNCH anything…"
             disabled={isThinking}
-            className="flex-1 bg-transparent text-sm text-gray-200 placeholder-gray-700
+            className="flex-1 bg-transparent text-sm text-gray-200 placeholder-gray-500
               outline-none disabled:opacity-50 min-w-0"
             autoComplete="off"
             spellCheck="false"
@@ -755,11 +755,11 @@ export default function LynchChat() {
             onClick={() => void send(input)}
             disabled={!input.trim() || isThinking}
             aria-label="Send message"
-            className="h-7 w-7 rounded-xl flex items-center justify-center shrink-0
-              bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-800
-              text-white disabled:text-gray-700 transition-colors duration-150"
+            className="h-8 w-8 rounded-xl flex items-center justify-center shrink-0
+              bg-indigo-600 hover:bg-indigo-500 disabled:bg-white/[0.05]
+              text-white disabled:text-gray-600 transition-colors duration-150"
           >
-            <Send size={12} strokeWidth={2.5} />
+            <Send size={14} strokeWidth={2.5} />
           </button>
         </div>
       </footer>

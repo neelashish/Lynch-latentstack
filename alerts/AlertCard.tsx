@@ -37,10 +37,10 @@ export const AlertCard: React.FC<AlertCardProps> = ({
 
   return (
     <div
-      className={`relative flex flex-col justify-between rounded-xl border p-5 transition-all duration-200 ${
+      className={`relative flex flex-col justify-between rounded-2xl border p-5 transition-all duration-200 ${
         isActive
-          ? 'border-emerald-500/30 bg-slate-900/80 shadow-lg shadow-emerald-950/10 hover:border-emerald-500/50'
-          : 'border-slate-800 bg-slate-950/60 opacity-75 hover:opacity-100 hover:border-slate-700'
+          ? 'border-emerald-500/30 bg-[#0d1117] shadow-lg shadow-emerald-950/10 hover:border-emerald-500/50'
+          : 'border-white/[0.08] bg-[#070a11] opacity-75 hover:opacity-100 hover:border-white/[0.12]'
       }`}
     >
       {/* Header Section */}

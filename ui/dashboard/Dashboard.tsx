@@ -210,12 +210,12 @@ export default function Dashboard({
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
                 <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400">
-                    <Zap size={16} />
-                  </div>
-                  <h2 className="text-xs font-black text-indigo-300 uppercase tracking-widest">
-                    LYNCH INSIGHT
-                  </h2>
+              <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400">
+                <Zap size={18} />
+              </div>
+              <h2 className="text-xs font-black text-indigo-400 uppercase tracking-[0.2em]">
+                LYNCH INSIGHT
+              </h2>
                 </div>
                 <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-2.5 py-0.5 rounded-full font-bold">
                   AI Synthesized
@@ -250,16 +250,16 @@ export default function Dashboard({
             <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
               <Link
                 href="/portfolio"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.1] text-xs font-semibold text-gray-200 transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-xs font-semibold text-gray-200 transition-all"
               >
                 <span>View Portfolio Details</span>
               </Link>
               <Link
                 href="/chat"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white shadow-lg shadow-indigo-950/40 transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white shadow-xl shadow-indigo-950/50 transition-all hover:scale-[1.02]"
               >
                 <span>Ask LYNCH Co-Pilot</span>
-                <ArrowRight size={13} />
+                <ArrowRight size={14} />
               </Link>
             </div>
           </div>

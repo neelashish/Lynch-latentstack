@@ -52,19 +52,19 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 p-4 sm:p-6">
+    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6 md:p-8">
       {/* Header */}
-      <div className="flex flex-col gap-1 border-b border-slate-800 pb-5">
+      <div className="flex flex-col gap-1 border-b border-white/[0.06] pb-5">
         <div className="flex items-center gap-2">
           <ActivityIcon className="h-5 w-5 text-emerald-400" />
           <span className="font-mono text-xs font-semibold uppercase tracking-wider text-emerald-400">
             LYNCH ACTIVITY
           </span>
         </div>
-        <h1 className="text-2xl font-bold text-slate-100 sm:text-3xl">
+        <h1 className="text-2xl font-bold text-white sm:text-3xl tracking-tight">
           Proactive Event Feed
         </h1>
-        <p className="text-sm text-slate-400">
+        <p className="text-xs sm:text-sm text-gray-400">
           Real-time log of market events, trigger condition matches, and system alerts
         </p>
       </div>
