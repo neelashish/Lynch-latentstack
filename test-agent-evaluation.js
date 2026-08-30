@@ -29,17 +29,7 @@ let aiCode = fs.readFileSync("agent/ai.ts", "utf8")
   .replace(/:\s*boolean/g, "")
   .replace(/export /g, "");
 
-let eventsCode = fs.readFileSync("agent/events.ts", "utf8")
-  .replace(/import [^\n]+;/g, "")
-  .replace(/export interface [\s\S]*?\n\}/g, "")
-  .replace(/interface [\s\S]*?\n\}/g, "")
-  .replace(/:\s*ActivityItem\[\]/g, "")
-  .replace(/:\s*ActivityItem/g, "")
-  .replace(/:\s*EmitEventParams/g, "")
-  .replace(/:\s*string/g, "")
-  .replace(/export /g, "");
-
-eval("const DEMO_ACTIVITY = [];\n" + eventsCode + "\n" + demoCode + "\n" + aiCode + "\n" + `
+eval("const DEMO_ACTIVITY = []; const emitAgentEvent = () => {}; const getStoredActivities = () => []; const saveStoredActivities = () => {};\n" + demoCode + "\n" + aiCode + "\n" + `
 const tests = [
   { id: 1, query: "Hello", expectedIntent: "greeting" },
   { id: 2, query: "What is LYNCH?", expectedIntent: "what_is_lynch" },

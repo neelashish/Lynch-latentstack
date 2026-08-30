@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { ActivityItem, DEMO_ACTIVITY } from "@/ui/data/demo";
+import { Activity, ActivitySeverity, getStoredActivities, saveStoredActivities } from "@/alerts/alert-data";
 
 /** Shared session in-memory activity log, pre-populated with initial demo items */
 const sessionActivityStore: ActivityItem[] = [...DEMO_ACTIVITY];
@@ -37,7 +38,37 @@ export function emitAgentEvent(params: EmitEventParams): ActivityItem {
 
   sessionActivityStore.unshift(newEvent);
 
+  // Sync to teammate's localStorage activity feed if window is available
   if (typeof window !== "undefined") {
+    try {
+      const severityMap: Record<"risk" | "alert" | "insight", ActivitySeverity> = {
+        risk: "danger",
+        alert: "warning",
+        insight: "info",
+      };
+      
+      const newTeammateActivity: Activity = {
+        id: newEvent.id,
+        type: params.icon === "risk" || params.icon === "alert" ? "alert_triggered" : "simulated_event",
+        symbol: "LYNCH",
+        title: params.icon === "risk" ? "Risk Scan Executed" : params.icon === "alert" ? "Research Alert" : "AI Insight Generated",
+        description: params.text,
+        timestamp: new Date().toISOString(),
+        severity: severityMap[params.icon] || "info",
+        lynchView: "ANALYSIS COMPLETE",
+        confidence: "90%",
+        risk: params.icon === "risk" ? "High" : "Low",
+      };
+
+      const stored = getStoredActivities();
+      // Avoid duplicate insertion if same ID already present
+      if (!stored.some((a) => a.id === newTeammateActivity.id)) {
+        saveStoredActivities([newTeammateActivity, ...stored]);
+      }
+    } catch (err) {
+      console.error("Failed to sync agent event to teammate activity store:", err);
+    }
+
     window.dispatchEvent(
       new CustomEvent("lynch:activity", { detail: newEvent })
     );
