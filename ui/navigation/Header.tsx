@@ -38,6 +38,8 @@ export default function Header({
   const derivedTitle =
     title && title !== "Overview"
       ? title
+      : pathname === "/overview"
+      ? "Overview"
       : pathname?.startsWith("/chat")
       ? "AI Chat Co-Pilot"
       : pathname?.startsWith("/portfolio")
@@ -46,11 +48,9 @@ export default function Header({
       ? "Alerts & Triggers"
       : pathname?.startsWith("/activity")
       ? "Activity Log"
-      : pathname?.startsWith("/portfolio")
-      ? "Portfolio Analyzer"
       : pathname?.startsWith("/stock")
       ? "Stock Analysis"
-      : "Overview";
+      : "Dashboard";
 
   return (
     <header className="sticky top-0 z-20 flex items-center justify-between px-5 py-3.5 bg-[#070a11]/95 backdrop-blur-md border-b border-white/[0.05]">

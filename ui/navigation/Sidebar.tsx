@@ -25,7 +25,7 @@ import {
 // Types
 // ---------------------------------------------------------------------------
 
-export type NavItem = "overview" | "chat" | "alerts" | "activity" | "portfolio";
+export type NavItem = "dashboard" | "overview" | "chat" | "portfolio" | "alerts" | "activity";
 
 interface SidebarProps {
   activeItem?: NavItem;
@@ -43,22 +43,28 @@ const NAV_ITEMS: Array<{
   href: string;
 }> = [
   {
-    id: "overview",
-    label: "Overview",
+    id: "dashboard",
+    label: "Dashboard",
     icon: <LayoutDashboard size={16} />,
     href: "/",
   },
   {
-    id: "portfolio",
-    label: "📊 Portfolio Analyzer",
-    icon: <PieChart size={16} />,
-    href: "/portfolio",
+    id: "overview",
+    label: "Overview",
+    icon: <Zap size={16} />,
+    href: "/overview",
   },
   {
     id: "chat",
     label: "Chat",
     icon: <MessageSquare size={16} />,
     href: "/chat",
+  },
+  {
+    id: "portfolio",
+    label: "Portfolio",
+    icon: <PieChart size={16} />,
+    href: "/portfolio",
   },
   {
     id: "alerts",
@@ -188,15 +194,17 @@ export default function Sidebar({ activeItem, onNavigate }: SidebarProps) {
 
   const currentActiveItem: NavItem =
     activeItem ??
-    (pathname?.startsWith("/chat")
+    (pathname === "/overview"
+      ? "overview"
+      : pathname?.startsWith("/chat")
       ? "chat"
+      : pathname?.startsWith("/portfolio")
+      ? "portfolio"
       : pathname?.startsWith("/alerts")
       ? "alerts"
       : pathname?.startsWith("/activity")
       ? "activity"
-      : pathname?.startsWith("/portfolio")
-      ? "portfolio"
-      : "overview");
+      : "dashboard");
 
   return (
     <>
