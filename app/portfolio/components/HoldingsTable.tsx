@@ -1,39 +1,39 @@
 "use client";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ui/portfolio/HoldingsTable.tsx
+// app/portfolio/components/HoldingsTable.tsx
 //
-// Shows the detailed holdings table for the demo portfolio.
-// Columns: Stock, Allocation, Quantity, Average Price, Current Price, P&L, Risk
+// Clean holdings table component showing Symbol, Company, Quantity, Avg Price, Current Price, P&L, Allocation %.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import React from "react";
-import Card from "../components/Card";
-import { Holding } from "../data/portfolio";
+import Card from "@/ui/components/Card";
+import { Holding } from "../types";
 import { TrendingUp, TrendingDown, Table } from "lucide-react";
 
 interface HoldingsTableProps {
   holdings: Holding[];
+  onRemoveHolding?: (symbol: string) => void;
 }
 
-export default function HoldingsTable({ holdings }: HoldingsTableProps) {
+export default function HoldingsTable({ holdings, onRemoveHolding }: HoldingsTableProps) {
   return (
-    <Card padding="md" className="overflow-hidden">
-      {/* Table Header / Title */}
-      <div className="flex items-center justify-between pb-4 border-b border-white/[0.06] mb-4">
+    <Card padding="md" className="overflow-hidden bg-[#0d1117]/80">
+      {/* Title */}
+      <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] mb-3">
         <div className="flex items-center gap-2">
-          <Table size={18} className="text-indigo-400" />
-          <h3 className="text-sm font-semibold text-white">Holdings Portfolio</h3>
+          <Table size={16} className="text-indigo-400" />
+          <h3 className="text-sm font-semibold text-white">Top Holdings</h3>
         </div>
         <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-          DEMO DATA
+          {holdings.length} Positions
         </span>
       </div>
 
-      {/* Table Content */}
+      {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs text-gray-300">
-          <thead className="bg-[#070a11] text-[11px] uppercase tracking-wider text-gray-500 font-semibold border-b border-white/[0.06]">
+          <thead className="bg-[#070a11] text-[10px] uppercase tracking-wider text-gray-500 font-semibold border-b border-white/[0.06]">
             <tr>
               <th className="py-2.5 px-3">Stock</th>
               <th className="py-2.5 px-3 text-right">Allocation</th>
@@ -42,6 +42,7 @@ export default function HoldingsTable({ holdings }: HoldingsTableProps) {
               <th className="py-2.5 px-3 text-right">Current Price</th>
               <th className="py-2.5 px-3 text-right">P&L</th>
               <th className="py-2.5 px-3 text-center">Risk</th>
+              {onRemoveHolding && <th className="py-2.5 px-3 text-center">Action</th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-white/[0.04]">
@@ -49,48 +50,35 @@ export default function HoldingsTable({ holdings }: HoldingsTableProps) {
               const currentVal = h.quantity * h.currentPrice;
               const investedVal = h.quantity * h.avgPrice;
               const pnlAbs = currentVal - investedVal;
-              const pnlPct = ((h.currentPrice - h.avgPrice) / h.avgPrice) * 100;
+              const pnlPct = investedVal > 0 ? ((h.currentPrice - h.avgPrice) / h.avgPrice) * 100 : 0;
               const isPositive = pnlAbs >= 0;
 
               return (
-                <tr
-                  key={h.symbol}
-                  className="hover:bg-white/[0.02] transition-colors"
-                >
-                  {/* Stock Symbol & Name */}
+                <tr key={h.symbol} className="hover:bg-white/[0.02] transition-colors">
                   <td className="py-3 px-3">
                     <div className="font-bold text-white flex items-center gap-1.5">
                       {h.symbol}
-                      <span className="text-[10px] font-normal text-gray-500">
-                        • {h.sector}
-                      </span>
+                      <span className="text-[10px] font-normal text-gray-500">• {h.sector}</span>
                     </div>
-                    <div className="text-[11px] text-gray-500 truncate max-w-[160px]">
-                      {h.name}
-                    </div>
+                    <div className="text-[11px] text-gray-500 truncate max-w-[150px]">{h.name}</div>
                   </td>
 
-                  {/* Allocation % */}
                   <td className="py-3 px-3 text-right font-semibold text-indigo-300">
                     {h.allocationPct}%
                   </td>
 
-                  {/* Quantity */}
                   <td className="py-3 px-3 text-right font-medium text-gray-300">
                     {h.quantity}
                   </td>
 
-                  {/* Avg Price */}
                   <td className="py-3 px-3 text-right text-gray-400">
                     ₹{h.avgPrice.toLocaleString("en-IN", { minimumFractionDigits: 1 })}
                   </td>
 
-                  {/* Current Demo Price */}
                   <td className="py-3 px-3 text-right font-medium text-white">
                     ₹{h.currentPrice.toLocaleString("en-IN", { minimumFractionDigits: 1 })}
                   </td>
 
-                  {/* P&L */}
                   <td className="py-3 px-3 text-right font-semibold">
                     <div
                       className={[
@@ -98,16 +86,10 @@ export default function HoldingsTable({ holdings }: HoldingsTableProps) {
                         isPositive ? "text-emerald-400" : "text-rose-400",
                       ].join(" ")}
                     >
-                      {isPositive ? (
-                        <TrendingUp size={12} />
-                      ) : (
-                        <TrendingDown size={12} />
-                      )}
+                      {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                       <span>
                         {isPositive ? "+" : ""}
-                        ₹{Math.abs(pnlAbs).toLocaleString("en-IN", {
-                          maximumFractionDigits: 0,
-                        })}
+                        ₹{Math.abs(pnlAbs).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                       </span>
                       <span className="text-[10px] opacity-80">
                         ({isPositive ? "+" : ""}
@@ -116,7 +98,6 @@ export default function HoldingsTable({ holdings }: HoldingsTableProps) {
                     </div>
                   </td>
 
-                  {/* Risk Badge */}
                   <td className="py-3 px-3 text-center">
                     <span
                       className={[
@@ -131,6 +112,18 @@ export default function HoldingsTable({ holdings }: HoldingsTableProps) {
                       {h.risk}
                     </span>
                   </td>
+
+                  {onRemoveHolding && (
+                    <td className="py-3 px-3 text-center">
+                      <button
+                        onClick={() => onRemoveHolding(h.symbol)}
+                        className="text-[10px] text-gray-500 hover:text-rose-400 transition-colors"
+                        title="Remove holding"
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  )}
                 </tr>
               );
             })}
