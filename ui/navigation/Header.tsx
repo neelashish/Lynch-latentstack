@@ -40,6 +40,8 @@ export default function Header({
       ? title
       : pathname?.startsWith("/chat")
       ? "AI Chat Co-Pilot"
+      : pathname?.startsWith("/portfolio")
+      ? "Portfolio Analyzer"
       : pathname?.startsWith("/alerts")
       ? "Alerts & Triggers"
       : pathname?.startsWith("/activity")

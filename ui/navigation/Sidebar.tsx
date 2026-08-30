@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   MessageSquare,
+  PieChart,
   Bell,
   Activity,
   Zap,
@@ -24,7 +25,7 @@ import {
 // Types
 // ---------------------------------------------------------------------------
 
-export type NavItem = "overview" | "chat" | "alerts" | "activity";
+export type NavItem = "overview" | "chat" | "portfolio" | "alerts" | "activity";
 
 interface SidebarProps {
   activeItem?: NavItem;
@@ -52,6 +53,12 @@ const NAV_ITEMS: Array<{
     label: "Chat",
     icon: <MessageSquare size={16} />,
     href: "/chat",
+  },
+  {
+    id: "portfolio",
+    label: "Portfolio",
+    icon: <PieChart size={16} />,
+    href: "/portfolio",
   },
   {
     id: "alerts",
@@ -183,6 +190,8 @@ export default function Sidebar({ activeItem, onNavigate }: SidebarProps) {
     activeItem ??
     (pathname?.startsWith("/chat")
       ? "chat"
+      : pathname?.startsWith("/portfolio")
+      ? "portfolio"
       : pathname?.startsWith("/alerts")
       ? "alerts"
       : pathname?.startsWith("/activity")
