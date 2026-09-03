@@ -15,7 +15,7 @@ LYNCH is a demo-first financial intelligence workspace for exploring portfolio h
 
 https://lynch-rust.vercel.app/
 
-## Project Resources
+## DEMO VIDEO AND LATENT TRANSCRIPT
 
 Drive: https://drive.google.com/drive/folders/1t1ErWQjCWkvDmyt2Tbv2TBuobcLYjRA6?usp=drive_link
 
